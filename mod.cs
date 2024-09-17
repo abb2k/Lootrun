@@ -14,8 +14,8 @@ namespace Lootrun
     [BepInPlugin(GUID, modName, modVersion)]
     public class LootrunBase : BaseUnityPlugin
     {
-        public const string GUID = "abb2k.Speedloot";
-        public const string modName = "Speedloot";
+        public const string GUID = "abb2k.Lootrun";
+        public const string modName = "Lootrun";
         public const string modVersion = "1.0.0.0";
 
         private readonly Harmony harmony = new Harmony(GUID);
