@@ -7,6 +7,7 @@ using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using Lootrun.hooks;
+using Lootrun.types;
 using UnityEngine;
 
 namespace Lootrun
@@ -24,6 +25,12 @@ namespace Lootrun
 
         public static ManualLogSource mls;
 
+        public static AssetBundle bundle;
+
+        public static Sprite DialogueBox1Frame_5, BloodStain2, DialogueBoxSimple_1, DialogueBoxSimple, DropdownArrow;
+
+        public static LootrunSettings currentRunSettings = new LootrunSettings();
+
         void Awake()
         {
             if (!Instance)
@@ -37,6 +44,19 @@ namespace Lootrun
 
             harmony.PatchAll(typeof(LootrunBase));
             harmony.PatchAll(typeof(MenuManagerHook));
+
+            string location = Instance.Info.Location;
+            location = location.TrimEnd("Lootrun.dll".ToCharArray());
+            bundle = AssetBundle.LoadFromFile(location + "modassets");
+
+            if (bundle != null)
+            {
+                DialogueBox1Frame_5 = LootrunBase.bundle.LoadAsset<Sprite>("DialogueBox1Frame 5");
+                BloodStain2 = LootrunBase.bundle.LoadAsset<Sprite>("BloodStain2");
+                DialogueBoxSimple_1 = LootrunBase.bundle.LoadAsset<Sprite>("DialogueBoxSimple 1");
+                DialogueBoxSimple = LootrunBase.bundle.LoadAsset<Sprite>("DialogueBoxSimple");
+                DropdownArrow = LootrunBase.bundle.LoadAsset<Sprite>("DropdownArrow");
+            }
         }
     }
 }
