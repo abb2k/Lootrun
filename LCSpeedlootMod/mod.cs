@@ -31,6 +31,8 @@ namespace Lootrun
 
         public static LootrunSettings currentRunSettings = new LootrunSettings();
 
+        public static bool isInLootrun;
+
         void Awake()
         {
             if (!Instance)
@@ -44,6 +46,7 @@ namespace Lootrun
 
             harmony.PatchAll(typeof(LootrunBase));
             harmony.PatchAll(typeof(MenuManagerHook));
+            harmony.PatchAll(typeof(StartOfRoundHook));
 
             string location = Instance.Info.Location;
             location = location.TrimEnd("Lootrun.dll".ToCharArray());

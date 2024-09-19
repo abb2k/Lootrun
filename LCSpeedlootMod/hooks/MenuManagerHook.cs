@@ -31,6 +31,8 @@ namespace Lootrun.hooks
             TextMeshProUGUI speedlootT = speedlootButton.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
             speedlootT.text = "> Lootrun";
 
+            LootrunBase.isInLootrun = false;
+
             // ---- speedloot menu ----
 
             GameObject empty = new GameObject();
@@ -68,6 +70,7 @@ namespace Lootrun.hooks
             speedlootStartButton.onClick.AddListener(() =>
             {
                 speedlootMenuContainer.SetActive(false);
+                LootrunBase.isInLootrun = true;
 
                 GameNetworkManager.Instance.StartHost();
             });
