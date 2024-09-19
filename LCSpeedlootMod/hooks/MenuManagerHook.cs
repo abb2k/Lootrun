@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
+using Lootrun.types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -42,6 +44,25 @@ namespace Lootrun.hooks
             speedlootMenuContainer.transform.position = ___HostSettingsScreen.transform.position;
             speedlootMenuContainer.transform.localScale = ___HostSettingsScreen.transform.localScale;
 
+            TMP_Dropdown moonsD = speedlootMenuContainer.transform.GetChild(2).GetComponent<TMP_Dropdown>();
+
+            List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>
+            {
+                new TMP_Dropdown.OptionData("41-Experimentation"),
+                new TMP_Dropdown.OptionData("220-Assurance"),
+                new TMP_Dropdown.OptionData("56-Vow"),
+                new TMP_Dropdown.OptionData("21-Offense"),
+                new TMP_Dropdown.OptionData("61-March"),
+                new TMP_Dropdown.OptionData("20-Adamance"),
+                new TMP_Dropdown.OptionData("85-Rend"),
+                new TMP_Dropdown.OptionData("7-Dine"),
+                new TMP_Dropdown.OptionData("8-Titan"),
+                new TMP_Dropdown.OptionData("68-Artifice"),
+                new TMP_Dropdown.OptionData("5-Embrion")
+            };
+
+            moonsD.AddOptions(options);
+
             //buttons
 
             GameObject speedlootBack = GameObject.Instantiate(speedlootButton, speedlootMenuContainer.transform);
@@ -71,6 +92,100 @@ namespace Lootrun.hooks
             {
                 speedlootMenuContainer.SetActive(false);
                 LootrunBase.isInLootrun = true;
+                GameNetworkManager.Instance.currentSaveFileName = "Speedloot";
+                LootrunSettings s = new LootrunSettings();
+                for (int i = 0; i < speedlootMenuContainer.transform.childCount; i++)
+                {
+                    Transform child = speedlootMenuContainer.transform.GetChild(i);
+
+                    if (child.name == "Shotguns/Knifes")
+                    {
+                        s.spacials = child.GetComponent<Toggle>().isOn;
+                    }
+
+                    if (child.name == "beesToggle")
+                    {
+                        s.bees = child.GetComponent<Toggle>().isOn;
+                    }
+
+                    if (child.name == "seedToggle")
+                    {
+                        s.randomseed = child.GetComponent<Toggle>().isOn;
+                    }
+
+                    if (child.name == "moonsDropdown")
+                    {
+                        switch (child.GetComponent<TMP_Dropdown>().options[child.GetComponent<TMP_Dropdown>().value].text)
+                        {
+                            case "41-Experimentation":
+                                s.moon = 0;
+                                break;
+
+                            case "220-Assurance":
+                                s.moon = 1;
+                                break;
+
+                            case "56-Vow":
+                                s.moon = 2;
+                                break;
+
+                            case "21-Offense":
+                                s.moon = 8;
+                                break;
+
+                            case "61-March":
+                                s.moon = 4;
+                                break;
+
+                            case "20-Adamance":
+                                s.moon = 5;
+                                break;
+
+                            case "85-Rend":
+                                s.moon = 6;
+                                break;
+
+                            case "7-Dine":
+                                s.moon = 7;
+                                break;
+
+                            case "8-Titan":
+                                s.moon = 9;
+                                break;
+
+                            case "68-Artifice":
+                                s.moon = 10;
+                                break;
+
+                            case "5-Embrion":
+                                s.moon = 12;
+                                break;
+                        }
+                        
+                    }
+
+                    if (child.name == "whetherDropdown")
+                    {
+                        s.weather = child.GetComponent<TMP_Dropdown>().value;
+                    }
+
+                    if (child.name == "seedInput")
+                    {
+                        if (int.TryParse(child.GetComponent<TMP_InputField>().text, out int res))
+                            s.seed = res;
+                        else
+                            s.seed = 0;
+                    }
+
+                    if (child.name == "money")
+                    {
+                        if (int.TryParse(child.GetChild(1).GetComponent<TMP_InputField>().text, out int res))
+                            s.money = res;
+                        else
+                            s.money = 0;
+                    }
+                }
+                LootrunBase.currentRunSettings = s;
 
                 GameNetworkManager.Instance.StartHost();
             });

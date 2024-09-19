@@ -1,8 +1,6 @@
 C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\Lootrun.dll
 C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\Lootrun.pdb
-C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\0Harmony.dll
 C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\Assembly-CSharp.dll
-C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\BepInEx.dll
 C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\Unity.TextMeshPro.dll
 C:\Users\Amitay\Documents\lethal company modding\Lootrun\LCSpeedlootMod\bin\Debug\UnityEngine.CoreModule.dll

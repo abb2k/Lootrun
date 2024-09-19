@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,8 @@ namespace Lootrun
 
         public static bool isInLootrun;
 
+        public static string oldSaveData;
+
         void Awake()
         {
             if (!Instance)
@@ -47,6 +50,8 @@ namespace Lootrun
             harmony.PatchAll(typeof(LootrunBase));
             harmony.PatchAll(typeof(MenuManagerHook));
             harmony.PatchAll(typeof(StartOfRoundHook));
+            harmony.PatchAll(typeof(SaveGamePatch));
+            harmony.PatchAll(typeof(TimeOfDayEventsTranspiler));
 
             string location = Instance.Info.Location;
             location = location.TrimEnd("Lootrun.dll".ToCharArray());

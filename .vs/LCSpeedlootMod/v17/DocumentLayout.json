@@ -3,16 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|c:\\users\\amitay\\documents\\lethal company modding\\lootrun\\lcspeedlootmod\\mod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\lcspeedlootmod\\hooks\\menumanagerhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\hooks\\menumanagerhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\lcspeedlootmod\\hooks\\gamenetworkmanagerhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\hooks\\gamenetworkmanagerhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\lcspeedlootmod\\hooks\\timeofdayhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\hooks\\timeofdayhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\lcspeedlootmod\\mod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\mod.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|c:\\users\\amitay\\documents\\lethal company modding\\lootrun\\lcspeedlootmod\\types\\lootrunsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\types\\lootrunsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|c:\\users\\amitay\\documents\\lethal company modding\\lootrun\\lcspeedlootmod\\hooks\\startofroundhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\hooks\\startofroundhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\lcspeedlootmod\\hooks\\menumanagerhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\hooks\\menumanagerhook.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\lcspeedlootmod\\types\\lootrunsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16A29BA4-62E6-4C8B-A69B-90E39D44FDB5}|LCSpeedlootMod\\Lootrun.csproj|solutionrelative:lcspeedlootmod\\types\\lootrunsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,17 +34,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "mod.cs",
               "DocumentMoniker": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\mod.cs",
               "RelativeDocumentMoniker": "LCSpeedlootMod\\mod.cs",
               "ToolTip": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\mod.cs",
               "RelativeToolTip": "LCSpeedlootMod\\mod.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAwwB8AAAAuAAAA",
+              "ViewState": "AQIAAB0AAAAAAAAAAAAQwDUAAAA9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-17T17:23:22.518Z",
               "IsPinned": true,
@@ -40,28 +52,67 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "LootrunSettings.cs",
-              "DocumentMoniker": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\types\\LootrunSettings.cs",
-              "RelativeDocumentMoniker": "LCSpeedlootMod\\types\\LootrunSettings.cs",
-              "ToolTip": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\types\\LootrunSettings.cs",
-              "RelativeToolTip": "LCSpeedlootMod\\types\\LootrunSettings.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAgAAAAEAAAA",
+              "DocumentIndex": 2,
+              "Title": "TimeOfDayHook.cs",
+              "DocumentMoniker": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\TimeOfDayHook.cs",
+              "RelativeDocumentMoniker": "LCSpeedlootMod\\hooks\\TimeOfDayHook.cs",
+              "ToolTip": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\TimeOfDayHook.cs",
+              "RelativeToolTip": "LCSpeedlootMod\\hooks\\TimeOfDayHook.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBYAAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-18T20:40:20.968Z",
+              "WhenOpened": "2024-09-19T16:33:21.526Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
+              "Title": "StartOfRoundHook.cs",
+              "DocumentMoniker": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\StartOfRoundHook.cs",
+              "RelativeDocumentMoniker": "LCSpeedlootMod\\hooks\\StartOfRoundHook.cs",
+              "ToolTip": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\StartOfRoundHook.cs",
+              "RelativeToolTip": "LCSpeedlootMod\\hooks\\StartOfRoundHook.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAAYwC8AAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T13:44:27.76Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GameNetworkManagerHook.cs",
+              "DocumentMoniker": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\GameNetworkManagerHook.cs",
+              "RelativeDocumentMoniker": "LCSpeedlootMod\\hooks\\GameNetworkManagerHook.cs",
+              "ToolTip": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\GameNetworkManagerHook.cs",
+              "RelativeToolTip": "LCSpeedlootMod\\hooks\\GameNetworkManagerHook.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBIAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-19T15:24:58.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "MenuManagerHook.cs",
               "DocumentMoniker": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\MenuManagerHook.cs",
               "RelativeDocumentMoniker": "LCSpeedlootMod\\hooks\\MenuManagerHook.cs",
               "ToolTip": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\hooks\\MenuManagerHook.cs",
               "RelativeToolTip": "LCSpeedlootMod\\hooks\\MenuManagerHook.cs",
-              "ViewState": "AQIAACsAAAAAAAAAAAAgwEYAAAAAAAAA",
+              "ViewState": "AQIAAJUAAAAAAAAAAAAYwLoAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-17T17:46:55.638Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LootrunSettings.cs",
+              "DocumentMoniker": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\types\\LootrunSettings.cs",
+              "RelativeDocumentMoniker": "LCSpeedlootMod\\types\\LootrunSettings.cs",
+              "ToolTip": "C:\\Users\\Amitay\\Documents\\lethal company modding\\Lootrun\\LCSpeedlootMod\\types\\LootrunSettings.cs",
+              "RelativeToolTip": "LCSpeedlootMod\\types\\LootrunSettings.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwA4AAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-18T20:40:20.968Z",
               "EditorCaption": ""
             }
           ]
