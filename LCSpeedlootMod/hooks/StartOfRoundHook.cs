@@ -49,6 +49,34 @@ namespace Lootrun.hooks
             __instance.overrideSeedNumber = LootrunBase.currentRunSettings.seed;
             Terminal terminal = UnityEngine.Object.FindObjectOfType<Terminal>();
             terminal.groupCredits = LootrunBase.currentRunSettings.money;
+
+            
+            StartOfRound.Instance.deadlineMonitorText.text = "DEADLINE:\nNever";
+
+            StartOfRound.Instance.profitQuotaMonitorText.text = "PROFIT QUOTA:\nAll of them"; 
+        }
+    }
+
+    [HarmonyPatch(typeof(StartOfRound), "PassTimeToNextDay")]
+    internal class PassTimeToNextDayPatch
+    {
+        [HarmonyPrefix]
+        static bool PassTimeToNextDayHook()
+        {
+            LootrunBase.LootrunTime = 0;
+            if (LootrunBase.isInLootrun) return false;
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.ShipHasLeft))]
+    internal class ShipHasLeftPatch
+    {
+        [HarmonyPrefix]
+        static void ShipHasLeftHook()
+        {
+            TimeOfDay.Instance.currentDayTimeStarted = false;
+            
         }
     }
 }

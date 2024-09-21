@@ -6,9 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.Logging;
+using DunGen;
+using GameNetcodeStuff;
 using HarmonyLib;
+using HarmonyLib.Tools;
 using Lootrun.hooks;
 using Lootrun.types;
+using TMPro;
 using UnityEngine;
 
 namespace Lootrun
@@ -34,7 +38,11 @@ namespace Lootrun
 
         public static bool isInLootrun;
 
-        public static string oldSaveData;
+        public static float LootrunTime;
+
+        public static TextMeshProUGUI timerText;
+
+        public static List<GrabbableObject> CurrentRoundScrap = new List<GrabbableObject>();
 
         void Awake()
         {
@@ -52,6 +60,17 @@ namespace Lootrun
             harmony.PatchAll(typeof(StartOfRoundHook));
             harmony.PatchAll(typeof(SaveGamePatch));
             harmony.PatchAll(typeof(TimeOfDayEventsTranspiler));
+            harmony.PatchAll(typeof(UpdateProfitQuotaCurrentTimePatch));
+            harmony.PatchAll(typeof(PassTimeToNextDayPatch));
+            harmony.PatchAll(typeof(waitForScrapToSpawnToSyncPatch));
+            harmony.PatchAll(typeof(StartGamePatch));
+            harmony.PatchAll(typeof(ShipHasLeftPatch));
+            harmony.PatchAll(typeof(PlayerControllerBPatch));
+            harmony.PatchAll(typeof(TimeOfDayUpdatePatch));
+            harmony.PatchAll(typeof(CollectNewScrapForThisRoundPatch));
+
+
+            
 
             string location = Instance.Info.Location;
             location = location.TrimEnd("Lootrun.dll".ToCharArray());

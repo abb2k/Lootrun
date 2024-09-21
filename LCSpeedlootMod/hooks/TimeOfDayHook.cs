@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Lootrun.hooks
 {
@@ -34,6 +35,31 @@ namespace Lootrun.hooks
             }
             
             return codes.AsEnumerable();
+        }
+    }
+
+    [HarmonyPatch(typeof(TimeOfDay), nameof(TimeOfDay.UpdateProfitQuotaCurrentTime))]
+    internal class UpdateProfitQuotaCurrentTimePatch
+    {
+        [HarmonyPrefix]
+        static bool UpdateProfitQuotaCurrentTimeHook()
+        {
+            if (LootrunBase.isInLootrun) return false;
+            return true;
+        }
+    }
+
+    [HarmonyPatch(typeof(TimeOfDay), "Update")]
+    internal class TimeOfDayUpdatePatch
+    {
+        [HarmonyPrefix]
+        static void UpdateHook(TimeOfDay __instance)
+        {
+            if (__instance.currentDayTimeStarted && LootrunBase.isInLootrun)
+            {
+                LootrunBase.LootrunTime += Time.deltaTime;
+                LootrunBase.timerText.text = LootrunBase.LootrunTime.ToString();
+            }
         }
     }
 }

@@ -34,6 +34,7 @@ namespace Lootrun.hooks
             speedlootT.text = "> Lootrun";
 
             LootrunBase.isInLootrun = false;
+            LootrunBase.LootrunTime = 0;
 
             // ---- speedloot menu ----
 
