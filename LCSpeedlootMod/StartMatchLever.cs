@@ -13,7 +13,12 @@ namespace Lootrun
         [HarmonyPostfix]
         static void StartGameHook()
         {
+            if (!LootrunBase.isInLootrun) return;
+
+            LootrunBase.CurrentRoundBees.Clear();
+            LootrunBase.CurrentRoundSpecials.Clear();
             LootrunBase.LootrunTime = 0;
+            LootrunBase.playersThisRound = StartOfRound.Instance.fullyLoadedPlayers.Count;
         }
     }
 }

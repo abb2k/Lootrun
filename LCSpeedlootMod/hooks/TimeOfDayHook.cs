@@ -62,4 +62,17 @@ namespace Lootrun.hooks
             }
         }
     }
+
+    [HarmonyPatch(typeof(TimeOfDay), "Awake")]
+    internal class TimeOfDayAwakePatch
+    {
+        [HarmonyPostfix]
+        static void AwakeHook(TimeOfDay __instance)
+        {
+            if (__instance.quotaVariables != null)
+            {
+                __instance.quotaVariables.startingCredits = LootrunBase.currentRunSettings.money;
+            }
+        }
+    }
 }

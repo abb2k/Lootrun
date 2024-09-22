@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using GameNetcodeStuff;
+using HarmonyLib;
+using Lootrun.types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,13 @@ namespace Lootrun.hooks
     [HarmonyPatch(typeof(StartOfRound), "Start")]
     internal class StartOfRoundHook
     {
+        [HarmonyPrefix]
+        static void StartHookPre(StartOfRound __instance)
+        {
+            Terminal terminal = UnityEngine.Object.FindObjectOfType<Terminal>();
+            terminal.groupCredits = LootrunBase.currentRunSettings.money;
+            terminal.startingCreditsAmount = LootrunBase.currentRunSettings.money;
+        }
         [HarmonyPostfix]
         static void StartHook(StartOfRound __instance)
         {
@@ -49,6 +58,7 @@ namespace Lootrun.hooks
             __instance.overrideSeedNumber = LootrunBase.currentRunSettings.seed;
             Terminal terminal = UnityEngine.Object.FindObjectOfType<Terminal>();
             terminal.groupCredits = LootrunBase.currentRunSettings.money;
+            terminal.startingCreditsAmount = LootrunBase.currentRunSettings.money;
 
             
             StartOfRound.Instance.deadlineMonitorText.text = "DEADLINE:\nNever";
@@ -75,8 +85,61 @@ namespace Lootrun.hooks
         [HarmonyPrefix]
         static void ShipHasLeftHook()
         {
+            if (!LootrunBase.isInLootrun) return;
+
             TimeOfDay.Instance.currentDayTimeStarted = false;
+
+            LootrunResults res = new LootrunResults();
+
+            int validScrapCount = 0;
+
+            for (int i = 0; i < RoundManager.Instance.scrapCollectedThisRound.Count; i++)
+            {
+                if (LootrunBase.CurrentRoundScrap.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
+                    validScrapCount++;
+
+                if (LootrunBase.currentRunSettings.bees && LootrunBase.CurrentRoundBees.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
+                    validScrapCount++;
+
+                if (LootrunBase.currentRunSettings.spacials && LootrunBase.CurrentRoundSpecials.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
+                    validScrapCount++;
+            }
+
+            int scrapCount = LootrunBase.CurrentRoundScrap.Count;
+            if (LootrunBase.currentRunSettings.bees)
+                scrapCount += LootrunBase.CurrentRoundBees.Count;
+            if (LootrunBase.currentRunSettings.spacials)
+                scrapCount += LootrunBase.CurrentRoundSpecials.Count;
+
+            res.players = LootrunBase.playersThisRound;
+            res.time = LootrunBase.LootrunTime;
+            res.scrapCollectedOutOf = new Vector2Int(validScrapCount, scrapCount);
+
+            LootrunBase.currentRunResults = res;
+
             
+        }
+    }
+
+    [HarmonyPatch(typeof(StartOfRound), "AutoSaveShipData")]
+    internal class AutoSaveShipDataPatch
+    {
+        [HarmonyPrefix]
+        static bool AutoSaveShipDataHook()
+        {
+            if (LootrunBase.isInLootrun)
+            {
+                HUDManager.Instance.saveDataIconAnimatorB.SetTrigger("save");
+
+                LootrunBase.allLootruns.Add(LootrunBase.currentRunSettings, LootrunBase.currentRunResults);
+                ES3.Save("allLootruns", LootrunBase.allLootruns, Application.persistentDataPath + "/LootrunSave");
+
+                //reset everything back to normal
+
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Lootrun.hooks
         [HarmonyPrefix]
         static void waitForScrapToSpawnToSyncHook(object[] __args)
         {
+            if (!LootrunBase.isInLootrun) return;
+
             List<NetworkObjectReference> scrap = ((NetworkObjectReference[])__args[0]).ToList();
 
             LootrunBase.CurrentRoundScrap.Clear();
@@ -27,25 +29,6 @@ namespace Lootrun.hooks
                     }
                 }
             }
-        }
-    }
-    [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.CollectNewScrapForThisRound))]
-    internal class CollectNewScrapForThisRoundPatch
-    {
-        [HarmonyPostfix]
-        static void CollectNewScrapForThisRoundHook()
-        {
-            bool foundAllItems = true;
-
-            for (int i = 0; i < LootrunBase.CurrentRoundScrap.Count; i++)
-            {
-                if (!RoundManager.Instance.scrapCollectedThisRound.Contains(LootrunBase.CurrentRoundScrap[i]))
-                    foundAllItems = false;
-
-            }
-
-            if (foundAllItems)
-                GameObject.FindObjectOfType<StartMatchLever>().EndGame();
         }
     }
 }
