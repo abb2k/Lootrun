@@ -44,6 +44,7 @@ namespace Lootrun.hooks
             speedlootMenuContainer.name = "speedlootMenuContainer";
             speedlootMenuContainer.transform.position = ___HostSettingsScreen.transform.position;
             speedlootMenuContainer.transform.localScale = ___HostSettingsScreen.transform.localScale;
+            speedlootMenuContainer.SetActive(false);
 
             TMP_Dropdown moonsD = speedlootMenuContainer.transform.GetChild(2).GetComponent<TMP_Dropdown>();
 

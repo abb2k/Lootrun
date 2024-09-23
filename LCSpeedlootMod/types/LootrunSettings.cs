@@ -15,5 +15,7 @@ namespace Lootrun.types
         public bool randomseed;
         public int seed;
         public int money;
+        public bool startCrusier;
+        public bool startJetpack;
     }
 }

@@ -18,7 +18,7 @@ namespace Lootrun
             LootrunBase.CurrentRoundBees.Clear();
             LootrunBase.CurrentRoundSpecials.Clear();
             LootrunBase.LootrunTime = 0;
-            LootrunBase.playersThisRound = StartOfRound.Instance.fullyLoadedPlayers.Count;
+            LootrunBase.playersThisRound = StartOfRound.Instance.connectedPlayersAmount + 1;
         }
     }
 }

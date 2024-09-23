@@ -73,6 +73,7 @@ namespace Lootrun
             harmony.PatchAll(typeof(GrabbableObjectStartPatch));
             harmony.PatchAll(typeof(AutoSaveShipDataPatch));
             harmony.PatchAll(typeof(TimeOfDayAwakePatch));
+            harmony.PatchAll(typeof(LoadShipGrabbableItemsPatch));
 
             allLootruns = ES3.Load("allLootruns", Application.persistentDataPath + "/LootrunSave", new Dictionary<LootrunSettings, LootrunResults>());
 

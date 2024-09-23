@@ -1,26 +1,22 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using Lootrun.types;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 namespace Lootrun.hooks
 {
     [HarmonyPatch(typeof(StartOfRound), "Start")]
     internal class StartOfRoundHook
     {
-        [HarmonyPrefix]
-        static void StartHookPre(StartOfRound __instance)
-        {
-            Terminal terminal = UnityEngine.Object.FindObjectOfType<Terminal>();
-            terminal.groupCredits = LootrunBase.currentRunSettings.money;
-            terminal.startingCreditsAmount = LootrunBase.currentRunSettings.money;
-        }
         [HarmonyPostfix]
         static void StartHook(StartOfRound __instance)
         {
@@ -56,14 +52,81 @@ namespace Lootrun.hooks
 
             __instance.overrideRandomSeed = !LootrunBase.currentRunSettings.randomseed;
             __instance.overrideSeedNumber = LootrunBase.currentRunSettings.seed;
-            Terminal terminal = UnityEngine.Object.FindObjectOfType<Terminal>();
-            terminal.groupCredits = LootrunBase.currentRunSettings.money;
-            terminal.startingCreditsAmount = LootrunBase.currentRunSettings.money;
 
-            
             StartOfRound.Instance.deadlineMonitorText.text = "DEADLINE:\nNever";
 
             StartOfRound.Instance.profitQuotaMonitorText.text = "PROFIT QUOTA:\nAll of them"; 
+        }
+    }
+
+    [HarmonyPatch(typeof(StartOfRound), "LoadShipGrabbableItems")]
+    internal class LoadShipGrabbableItemsPatch
+    {
+        [HarmonyPostfix]
+        static void LoadShipGrabbableItemsHook(StartOfRound __instance)
+        {
+            GameObject jetpackPrefab = null;
+            GameObject weedkillerPrefab = null;
+
+            for (int i = 0; i < __instance.allItemsList.itemsList.Count; i++)
+            {
+                LootrunBase.mls.LogInfo(__instance.allItemsList.itemsList[i].itemName);
+                if (__instance.allItemsList.itemsList[i].itemName == "Jetpack")
+                {
+                    jetpackPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
+                }
+
+                if (__instance.allItemsList.itemsList[i].itemName == "Weed killer")
+                {
+                    weedkillerPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
+                }
+            }
+
+            if (LootrunBase.currentRunSettings.startJetpack)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    GrabbableObject component = UnityEngine.Object.Instantiate(jetpackPrefab, new Vector3(-3.5f, 1, -14.5f), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
+                    component.fallTime = 1f;
+                    component.hasHitGround = true;
+                    component.scrapPersistedThroughRounds = true;
+                    component.isInElevator = true;
+                    component.isInShipRoom = true;
+                    component.NetworkObject.Spawn();
+                }
+            }
+
+            GameObject crusierPrefab = null;
+
+            for (int i = 0; i < __instance.VehiclesList.Length; i++)
+            {
+                if (__instance.VehiclesList[i].name == "CompanyCruiser")
+                    crusierPrefab = __instance.VehiclesList[i];
+            }
+
+            if (LootrunBase.currentRunSettings.startCrusier)
+            {
+                GameObject gameObject = UnityEngine.Object.Instantiate(crusierPrefab, __instance.magnetPoint.position + __instance.magnetPoint.forward * 5f, Quaternion.identity, RoundManager.Instance.VehiclesContainer);
+                __instance.attachedVehicle = gameObject.GetComponent<VehicleController>();
+                __instance.isObjectAttachedToMagnet = true;
+                __instance.attachedVehicle.NetworkObject.Spawn();
+                __instance.magnetOn = true;
+                __instance.magnetLever.initialBoolState = true;
+                __instance.magnetLever.setInitialState = true;
+                __instance.magnetLever.SetInitialState();
+
+                if (weedkillerPrefab)
+                    for (int i = 0; i < 2; i++)
+                    {
+                        GrabbableObject component = UnityEngine.Object.Instantiate(weedkillerPrefab, new Vector3(10, 1.5f, -13), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
+                        component.fallTime = 1f;
+                        component.hasHitGround = true;
+                        component.scrapPersistedThroughRounds = true;
+                        component.isInElevator = true;
+                        component.isInShipRoom = true;
+                        component.NetworkObject.Spawn();
+                    }
+            }
         }
     }
 
