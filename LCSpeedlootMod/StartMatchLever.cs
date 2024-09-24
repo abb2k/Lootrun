@@ -1,9 +1,11 @@
 ﻿using HarmonyLib;
+using Lootrun.hooks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Netcode;
 
 namespace Lootrun
 {
@@ -13,6 +15,11 @@ namespace Lootrun
         [HarmonyPostfix]
         static void StartGameHook()
         {
+            if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
+                return;
+
+            //LootrunNetworkHandler.Instance.EventClientRpc("SetLootrunEnabled");
+
             if (!LootrunBase.isInLootrun) return;
 
             LootrunBase.CurrentRoundBees.Clear();

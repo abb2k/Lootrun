@@ -84,7 +84,10 @@
     <Compile Include="GrabbableObjectHook.cs" />
     <Compile Include="hooks\ApparatusHook.cs" />
     <Compile Include="hooks\Class1.cs" />
+    <Compile Include="hooks\CNetworkObjectManagerHook.cs" />
+    <Compile Include="hooks\GameNetworkManager.cs" />
     <Compile Include="hooks\GameNetworkManagerHook.cs" />
+    <Compile Include="hooks\LootrunNetworkHandler.cs" />
     <Compile Include="hooks\MenuManagerHook.cs" />
     <Compile Include="hooks\RedLocustBeesHook.cs" />
     <Compile Include="hooks\RoundManagerHook.cs" />

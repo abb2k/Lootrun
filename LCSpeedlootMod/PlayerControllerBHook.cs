@@ -20,9 +20,11 @@ namespace Lootrun
 
             var empty = new GameObject();
             var text = GameObject.Instantiate(empty, __instance.playerHudUIContainer);
+            text.name = "Lootrun time text";
+            text.transform.localPosition = new Vector3(350, -200, 0);
             TextMeshProUGUI textComp = text.AddComponent<TextMeshProUGUI>();
 
-            textComp.text = "TIMEWILLBEHERE";
+            textComp.text = LootrunBase.SecsToTimer(0);
 
             LootrunBase.timerText = textComp;
             GameObject.Destroy(empty);

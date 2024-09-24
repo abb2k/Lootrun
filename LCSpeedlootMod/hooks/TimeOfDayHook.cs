@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Lootrun.hooks
@@ -49,30 +50,40 @@ namespace Lootrun.hooks
         }
     }
 
-    [HarmonyPatch(typeof(TimeOfDay), "Update")]
+    [HarmonyPatch]
     internal class TimeOfDayUpdatePatch
     {
-        [HarmonyPrefix]
+        [HarmonyPrefix, HarmonyPatch(typeof(TimeOfDay), "Update")]
         static void UpdateHook(TimeOfDay __instance)
         {
             if (__instance.currentDayTimeStarted && LootrunBase.isInLootrun)
             {
+                if (!LootrunBase.isInLootrun) return;
+                if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
+                    return;
+
                 LootrunBase.LootrunTime += Time.deltaTime;
-                LootrunBase.timerText.text = LootrunBase.LootrunTime.ToString();
+                LootrunBase.timerText.text = LootrunBase.SecsToTimer(LootrunBase.LootrunTime);
+
+                //LootrunNetworkHandler.Instance.UpdateTimeClientRpc(LootrunBase.LootrunTime);
+
             }
         }
-    }
 
-    [HarmonyPatch(typeof(TimeOfDay), "Awake")]
-    internal class TimeOfDayAwakePatch
-    {
-        [HarmonyPostfix]
+        [HarmonyPostfix, HarmonyPatch(typeof(TimeOfDay), "Awake")]
         static void AwakeHook(TimeOfDay __instance)
         {
+            LootrunNetworkHandler.TimeEvent += ReceivedTimeFromServer;
             if (__instance.quotaVariables != null)
             {
                 __instance.quotaVariables.startingCredits = LootrunBase.currentRunSettings.money;
             }
+        }
+
+        static void ReceivedTimeFromServer(float time)
+        {
+            LootrunBase.LootrunTime = time;
+            LootrunBase.timerText.text = LootrunBase.SecsToTimer(time);
         }
     }
 }

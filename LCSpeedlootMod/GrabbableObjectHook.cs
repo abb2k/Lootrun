@@ -7,19 +7,16 @@ using System.Threading.Tasks;
 
 namespace Lootrun
 {
-    [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.Start))]
-    internal class GrabbableObjectStartPatch
+    [HarmonyPatch(typeof(KnifeItem), "__initializeVariables")]
+    internal class KnifePatch
     {
         [HarmonyPostfix]
-        static void StartHook(GrabbableObject __instance)
+        static void Hook(KnifeItem __instance)
         {
+            LootrunBase.mls.LogInfo("KNIFE IS HERE YAY");
             if (!LootrunBase.isInLootrun) return;
 
-            KnifeItem knife = (KnifeItem)__instance;
-            if (knife != null)
-            {
-                LootrunBase.CurrentRoundSpecials.Add(knife);
-            }
+            LootrunBase.CurrentRoundSpecials.Add(__instance);
         }
     }
 }

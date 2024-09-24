@@ -17,6 +17,9 @@ namespace Lootrun.hooks
     {
         public static GameObject speedlootMenuContainer;
 
+        public static TMP_Dropdown moonsDropdown;
+        public static TMP_Dropdown weatherDropdown;
+
         [HarmonyPatch("Start")]
         [HarmonyPostfix]
         static void StartHook(ref GameObject ___menuButtons, ref GameObject ___HostSettingsScreen)
@@ -46,7 +49,8 @@ namespace Lootrun.hooks
             speedlootMenuContainer.transform.localScale = ___HostSettingsScreen.transform.localScale;
             speedlootMenuContainer.SetActive(false);
 
-            TMP_Dropdown moonsD = speedlootMenuContainer.transform.GetChild(2).GetComponent<TMP_Dropdown>();
+            moonsDropdown = speedlootMenuContainer.transform.GetChild(2).GetComponent<TMP_Dropdown>();
+            weatherDropdown = speedlootMenuContainer.transform.GetChild(3).GetComponent<TMP_Dropdown>();
 
             List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>
             {
@@ -63,7 +67,36 @@ namespace Lootrun.hooks
                 new TMP_Dropdown.OptionData("5-Embrion")
             };
 
-            moonsD.AddOptions(options);
+            moonsDropdown.AddOptions(options);
+
+            List<TMP_Dropdown.OptionData> weatherOptions = new List<TMP_Dropdown.OptionData>();
+
+            var weatherOptionsViable = LootrunBase.MoonAvalableWeathers(LootrunBase.MoonNameToID(moonsDropdown.options[moonsDropdown.value].text));
+
+            weatherOptions.Add(new TMP_Dropdown.OptionData("Random"));
+            for (int i = 0; i < weatherOptionsViable.Count; i++)
+            {
+                weatherOptions.Add(new TMP_Dropdown.OptionData(weatherOptionsViable[i].ToString()));
+            }
+
+            weatherDropdown.AddOptions(weatherOptions);
+
+            moonsDropdown.onValueChanged.AddListener((int newVal) =>
+            {
+                weatherDropdown.ClearOptions();
+
+                List<TMP_Dropdown.OptionData> _weatherOptions = new List<TMP_Dropdown.OptionData>();
+
+                var _weatherOptionsViable = LootrunBase.MoonAvalableWeathers(LootrunBase.MoonNameToID(moonsDropdown.options[moonsDropdown.value].text));
+
+                _weatherOptions.Add(new TMP_Dropdown.OptionData("Random"));
+                for (int i = 0; i < _weatherOptionsViable.Count; i++)
+                {
+                    _weatherOptions.Add(new TMP_Dropdown.OptionData(_weatherOptionsViable[i].ToString()));
+                }
+
+                weatherDropdown.AddOptions(_weatherOptions);
+            });
 
             //buttons
 
@@ -96,6 +129,19 @@ namespace Lootrun.hooks
                 LootrunBase.isInLootrun = true;
                 GameNetworkManager.Instance.currentSaveFileName = "Speedloot";
                 LootrunSettings s = new LootrunSettings();
+
+                s.moon = LootrunBase.MoonNameToID(moonsDropdown.options[moonsDropdown.value].text);
+
+                if (weatherDropdown.options[weatherDropdown.value].text == "Random")
+                {
+                    s.weather = -2;
+                }
+                else
+                {
+                    s.weather = (int)LootrunBase.weatherNameToType(weatherDropdown.options[weatherDropdown.value].text);
+                    LootrunBase.mls.LogInfo("weather " + s.weather);
+                }
+                
                 for (int i = 0; i < speedlootMenuContainer.transform.childCount; i++)
                 {
                     Transform child = speedlootMenuContainer.transform.GetChild(i);
@@ -113,62 +159,6 @@ namespace Lootrun.hooks
                     if (child.name == "seedToggle")
                     {
                         s.randomseed = child.GetComponent<Toggle>().isOn;
-                    }
-
-                    if (child.name == "moonsDropdown")
-                    {
-                        switch (child.GetComponent<TMP_Dropdown>().options[child.GetComponent<TMP_Dropdown>().value].text)
-                        {
-                            case "41-Experimentation":
-                                s.moon = 0;
-                                break;
-
-                            case "220-Assurance":
-                                s.moon = 1;
-                                break;
-
-                            case "56-Vow":
-                                s.moon = 2;
-                                break;
-
-                            case "21-Offense":
-                                s.moon = 8;
-                                break;
-
-                            case "61-March":
-                                s.moon = 4;
-                                break;
-
-                            case "20-Adamance":
-                                s.moon = 5;
-                                break;
-
-                            case "85-Rend":
-                                s.moon = 6;
-                                break;
-
-                            case "7-Dine":
-                                s.moon = 7;
-                                break;
-
-                            case "8-Titan":
-                                s.moon = 9;
-                                break;
-
-                            case "68-Artifice":
-                                s.moon = 10;
-                                break;
-
-                            case "5-Embrion":
-                                s.moon = 12;
-                                break;
-                        }
-                        
-                    }
-
-                    if (child.name == "whetherDropdown")
-                    {
-                        s.weather = child.GetComponent<TMP_Dropdown>().value;
                     }
 
                     if (child.name == "seedInput")
