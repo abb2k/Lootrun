@@ -24,7 +24,8 @@ namespace Lootrun.hooks
         [HarmonyPostfix]
         static void StartHook(ref GameObject ___menuButtons, ref GameObject ___HostSettingsScreen)
         {
-            if (___menuButtons.transform.GetChild(1) == null || ___menuButtons == null) return;
+            if (___menuButtons == null) return;
+            if (___menuButtons.transform.GetChild(1) == null) return;
 
             GameObject speedlootButton = GameObject.Instantiate(___menuButtons.transform.GetChild(1).gameObject, ___menuButtons.transform);
             speedlootButton.name = "LootrunButton";

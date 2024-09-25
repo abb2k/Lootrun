@@ -16,6 +16,7 @@ namespace Lootrun
         [HarmonyPostfix]
         static void StartHook(PlayerControllerB __instance)
         {
+            if (!LootrunBase.isInLootrun) return;
             if (LootrunBase.timerText) return;
 
             var empty = new GameObject();

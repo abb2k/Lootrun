@@ -58,7 +58,6 @@ namespace Lootrun.hooks
         {
             if (__instance.currentDayTimeStarted && LootrunBase.isInLootrun)
             {
-                if (!LootrunBase.isInLootrun) return;
                 if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
                     return;
 
@@ -73,6 +72,7 @@ namespace Lootrun.hooks
         [HarmonyPostfix, HarmonyPatch(typeof(TimeOfDay), "Awake")]
         static void AwakeHook(TimeOfDay __instance)
         {
+            if (!LootrunBase.isInLootrun) return;
             LootrunNetworkHandler.TimeEvent += ReceivedTimeFromServer;
             if (__instance.quotaVariables != null)
             {

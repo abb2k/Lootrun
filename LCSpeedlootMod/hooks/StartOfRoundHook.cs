@@ -20,9 +20,13 @@ namespace Lootrun.hooks
         [HarmonyPostfix, HarmonyPatch(typeof(StartOfRound), "Start")]
         static void StartHook(StartOfRound __instance)
         {
+            if (!LootrunBase.isInLootrun) return;
+
             LootrunNetworkHandler.LevelEvent += ReceivedEventFromServer;
             LootrunNetworkHandler.LootrunResEvent += ReceivedLootrunResFromServer;
-            if (!LootrunBase.isInLootrun) return;
+
+            if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
+                return;
 
             __instance.currentLevel = __instance.levels[LootrunBase.currentRunSettings.moon];
             __instance.currentLevelID = LootrunBase.currentRunSettings.moon;
@@ -64,6 +68,19 @@ namespace Lootrun.hooks
             if (eventName == "SetLootrunEnabled")
             {
                 LootrunBase.isInLootrun = true;
+
+                if (LootrunBase.timerText) return;
+
+                var empty = new GameObject();
+                var text = GameObject.Instantiate(empty, StartOfRound.Instance.localPlayerController.playerHudUIContainer);
+                text.name = "Lootrun time text";
+                text.transform.localPosition = new Vector3(350, -200, 0);
+                TextMeshProUGUI textComp = text.AddComponent<TextMeshProUGUI>();
+
+                textComp.text = LootrunBase.SecsToTimer(0);
+
+                LootrunBase.timerText = textComp;
+                GameObject.Destroy(empty);
                 return;
             }
             if (eventName == "ClearInventory")
@@ -93,6 +110,10 @@ namespace Lootrun.hooks
         [HarmonyPostfix]
         static void LoadShipGrabbableItemsHook(StartOfRound __instance)
         {
+            if (!LootrunBase.isInLootrun) return;
+            if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
+                return;
+
             GameObject jetpackPrefab = null;
             GameObject weedkillerPrefab = null;
 
@@ -247,6 +268,9 @@ namespace Lootrun.hooks
                 ES3.Save("allLootruns", LootrunBase.allLootruns, Application.persistentDataPath + "/LootrunSave");
 
                 //reset everything back to normal
+
+                if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
+                    return false;
 
                 List<GrabbableObject> items = GameObject.FindObjectsOfType<GrabbableObject>().ToList();
                 foreach (GrabbableObject item in items)
