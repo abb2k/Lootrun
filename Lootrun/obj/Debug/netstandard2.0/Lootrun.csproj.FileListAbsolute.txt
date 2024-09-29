@@ -1,5 +1,0 @@
-C:\Users\Amitay\Documents\lethal company modding\Lootrun\Lootrun\obj\Debug\netstandard2.0\Lootrun.csproj.AssemblyReference.cache
-C:\Users\Amitay\Documents\lethal company modding\Lootrun\Lootrun\obj\Debug\netstandard2.0\Lootrun.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Amitay\Documents\lethal company modding\Lootrun\Lootrun\obj\Debug\netstandard2.0\Lootrun.AssemblyInfoInputs.cache
-C:\Users\Amitay\Documents\lethal company modding\Lootrun\Lootrun\obj\Debug\netstandard2.0\Lootrun.AssemblyInfo.cs
-C:\Users\Amitay\Documents\lethal company modding\Lootrun\Lootrun\obj\Debug\netstandard2.0\Lootrun.csproj.CoreCompileInputs.cache
