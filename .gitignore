@@ -2,3 +2,4 @@ bin
 Package
 postBuild.bat
 .vs
+obj
