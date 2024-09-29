@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Lootrun")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+54d01cf16d06f5e1a4daa4916f4c95d4fcb7db6a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c73b84816b7c7d9f1f2ba246ee3120273b0daa06")]
 [assembly: System.Reflection.AssemblyProductAttribute("Lootrun")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Lootrun")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
