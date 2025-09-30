@@ -29,6 +29,8 @@ namespace Lootrun.types
         public bool startCrusier;
         [SerializeField]
         public bool startJetpack;
+        [SerializeField]
+        public bool isEndless = true;
 
         public bool compare(LootrunSettings other)
         {
@@ -43,6 +45,7 @@ namespace Lootrun.types
             if (money != other.money) return false;
             if (startCrusier != other.startCrusier) return false;
             if (startJetpack != other.startJetpack) return false;
+            if (isEndless != other.isEndless) return false;
 
             return true;
         }
@@ -58,6 +61,7 @@ namespace Lootrun.types
             serializer.SerializeValue(ref money);
             serializer.SerializeValue(ref startJetpack);
             serializer.SerializeValue(ref startCrusier);
+            serializer.SerializeValue(ref isEndless);
         }
     }
 }

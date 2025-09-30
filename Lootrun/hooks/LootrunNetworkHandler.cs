@@ -30,6 +30,9 @@ namespace Lootrun.hooks
 
             textComp.text = LootrunBase.SecsToTimer(0);
 
+            if (!LootrunBase.currentRunSettings.isEndless)
+                text.SetActive(false);
+
             LootrunBase.timerText = textComp;
         }
 
@@ -57,11 +60,7 @@ namespace Lootrun.hooks
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
                 return;
 
-            StartOfRound.Instance.currentLevel = StartOfRound.Instance.levels[moon];
-            StartOfRound.Instance.currentLevelID = moon;
-            TimeOfDay.Instance.currentLevel = StartOfRound.Instance.currentLevel;
-            RoundManager.Instance.currentLevel = StartOfRound.Instance.levels[moon];
-
+            StartOfRound.Instance.ChangeLevel(moon);
 
             StartOfRound.Instance.currentLevel.currentWeather = (LevelWeatherType)weather;
 
@@ -101,7 +100,7 @@ namespace Lootrun.hooks
             {
                 LootrunNetworkHandler.instance.SyncInLootrunClientRpc(playerID, LootrunBase.isInLootrun);
                 if (LootrunBase.isInLootrun)
-                    LootrunNetworkHandler.instance.SyncStatsClientRpc(LootrunBase.currentRunSettings.moon, (int)StartOfRound.Instance.currentLevel.overrideWeatherType, LootrunBase.currentRunSettings.money);
+                    LootrunNetworkHandler.instance.SyncStatsClientRpc(LootrunBase.currentRunSettings.moon, (int)StartOfRound.Instance.currentLevel.currentWeather, LootrunBase.currentRunSettings.money);
             }
         }
     }

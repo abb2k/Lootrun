@@ -29,6 +29,8 @@ namespace Lootrun.hooks
         public static TMP_InputField seedInput;
         public static TMP_InputField moneyAmountInput;
 
+        public static Toggle isEndlessToggle;
+
         public static TextMeshProUGUI bestRunText;
 
         [HarmonyPatch("Start")]
@@ -61,36 +63,54 @@ namespace Lootrun.hooks
             speedlootMenuContainer.transform.localScale = ___HostSettingsScreen.transform.localScale;
             speedlootMenuContainer.SetActive(false);
 
+            LootrunBase.mls.LogInfo("start UI Setup");
+
             //setup ui
 
             moonsDropdown = speedlootMenuContainer.transform.GetChild(2).GetComponent<TMP_Dropdown>();
             weatherDropdown = speedlootMenuContainer.transform.GetChild(3).GetComponent<TMP_Dropdown>();
+            LootrunBase.mls.LogInfo("1");
 
             beesToggle = speedlootMenuContainer.transform.GetChild(4).GetComponent<Toggle>();
             specialsToggle = speedlootMenuContainer.transform.GetChild(5).GetComponent<Toggle>();
             SJetpacksToggle = speedlootMenuContainer.transform.GetChild(6).GetComponent<Toggle>();
             SCrusierToggle = speedlootMenuContainer.transform.GetChild(7).GetComponent<Toggle>();
             randomSeedToggle = speedlootMenuContainer.transform.GetChild(9).GetComponent<Toggle>();
+            LootrunBase.mls.LogInfo("2");
 
             moneyAmountInput = speedlootMenuContainer.transform.GetChild(8).GetChild(1).GetComponent<TMP_InputField>();
             seedInput = speedlootMenuContainer.transform.GetChild(10).GetComponent<TMP_InputField>();
+            LootrunBase.mls.LogInfo("3");
+
+            isEndlessToggle = speedlootMenuContainer.transform.GetChild(11).GetComponent<Toggle>();
+            LootrunBase.mls.LogInfo("4");
 
             moonsDropdown.onValueChanged.AddListener(UpdateBest);
             weatherDropdown.onValueChanged.AddListener(UpdateBest);
+            LootrunBase.mls.LogInfo("5");
 
             beesToggle.onValueChanged.AddListener(UpdateBest);
             specialsToggle.onValueChanged.AddListener(UpdateBest);
             SJetpacksToggle.onValueChanged.AddListener(UpdateBest);
             SCrusierToggle.onValueChanged.AddListener(UpdateBest);
+            LootrunBase.mls.LogInfo("6");
+
+            LootrunBase.mls.LogInfo($"{(isEndlessToggle == null ? "null" : "yay")}, ");
+
+            isEndlessToggle.onValueChanged.AddListener(UpdateBest);
+            LootrunBase.mls.LogInfo("7");
 
             randomSeedToggle.onValueChanged.AddListener(toggleSeedInput);
             randomSeedToggle.onValueChanged.AddListener(UpdateBest);
-            
+            LootrunBase.mls.LogInfo("8");
 
             moneyAmountInput.onValueChanged.AddListener(UpdateBest);
             seedInput.onValueChanged.AddListener(UpdateBest);
+            LootrunBase.mls.LogInfo("9");
 
-            bestRunText = speedlootMenuContainer.transform.GetChild(12).GetComponent<TextMeshProUGUI>();
+            bestRunText = speedlootMenuContainer.transform.GetChild(13).GetComponent<TextMeshProUGUI>();
+
+            LootrunBase.mls.LogInfo("post buttons");
 
             //setup ui variables
 
@@ -163,11 +183,15 @@ namespace Lootrun.hooks
                 weatherDropdown.AddOptions(_weatherOptions);
             });
 
+            LootrunBase.mls.LogInfo("post moons/weather");
+
             beesToggle.isOn = LootrunBase.currentRunSettings.bees;
             randomSeedToggle.isOn = LootrunBase.currentRunSettings.randomseed;
             SCrusierToggle.isOn = LootrunBase.currentRunSettings.startCrusier;
             SJetpacksToggle.isOn = LootrunBase.currentRunSettings.startJetpack;
             specialsToggle.isOn = LootrunBase.currentRunSettings.spacials;
+
+            isEndlessToggle.isOn = LootrunBase.currentRunSettings.isEndless;
 
             if (LootrunBase.currentRunSettings.money != 0)
                 moneyAmountInput.text = LootrunBase.currentRunSettings.money.ToString();
@@ -203,9 +227,12 @@ namespace Lootrun.hooks
                     seedInput.text = "";
             });
 
+            LootrunBase.mls.LogInfo("post inputs");
+
             GameObject speedlootBack = GameObject.Instantiate(speedlootButton, speedlootMenuContainer.transform);
+            LootrunBase.mls.LogInfo($"back button is {(speedlootBack == null ? "null" : "cool")}");
             speedlootBack.name = "speedlootBack";
-            speedlootBack.transform.localPosition = new Vector3(0, -90, 0);
+            speedlootBack.transform.localPosition = new Vector3(0, -110, 0);
             speedlootBack.GetComponent<RectTransform>().sizeDelta = new Vector2(120, 30);
             speedlootBack.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(120, 25);
             speedlootBack.transform.GetChild(0).localPosition = Vector3.zero;
@@ -214,14 +241,16 @@ namespace Lootrun.hooks
             {
                 speedlootMenuContainer.SetActive(false);
             });
+            LootrunBase.mls.LogInfo($"post backbtn");
             TextMeshProUGUI speedlootBacktext = speedlootBack.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
             speedlootBacktext.transform.localPosition = Vector3.zero;
             speedlootBacktext.alignment = TextAlignmentOptions.Center;
             speedlootBacktext.text = "[ Back ]";
+            LootrunBase.mls.LogInfo($"post backtext");
 
             GameObject speedlootStart = GameObject.Instantiate(speedlootBack, speedlootMenuContainer.transform);
             speedlootStart.name = "speedlootStart";
-            speedlootStart.transform.localPosition = new Vector3(0, -65, 0);
+            speedlootStart.transform.localPosition = new Vector3(0, -85, 0);
             speedlootStart.GetComponent<RectTransform>().sizeDelta = new Vector2(130, 30);
             speedlootStart.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(130, 25);
             speedlootStart.transform.GetChild(0).localPosition = Vector3.zero;
@@ -251,6 +280,8 @@ namespace Lootrun.hooks
                 s.startCrusier = SCrusierToggle.isOn;
                 s.randomseed = randomSeedToggle.isOn;
 
+                s.isEndless = isEndlessToggle.isOn;
+
                 if (int.TryParse(seedInput.text, out int resSeed))
                     s.seed = resSeed;
                 else
@@ -271,6 +302,8 @@ namespace Lootrun.hooks
             speedlootStartButtontext.text = "[ Start ]";
 
             //options
+
+            LootrunBase.mls.LogInfo("lootrun on click");
 
             speedlootB.onClick.AddListener(() =>
             {
@@ -314,6 +347,8 @@ namespace Lootrun.hooks
             s.startJetpack = SJetpacksToggle.isOn;
             s.startCrusier = SCrusierToggle.isOn;
             s.randomseed = randomSeedToggle.isOn;
+
+            s.isEndless = isEndlessToggle.isOn;
 
             if (int.TryParse(seedInput.text, out int resSeed))
                 s.seed = resSeed;

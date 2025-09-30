@@ -15,7 +15,7 @@ namespace Lootrun.hooks
         [HarmonyPrefix]
         static bool SetShipToLeaveOnMidnightClientRpcPatch()
         {
-            if (LootrunBase.isInLootrun)
+            if (LootrunBase.isInLootrun && LootrunBase.currentRunSettings.isEndless)
             {
                 return false;
             }

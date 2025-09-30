@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 namespace Lootrun.hooks
 {
@@ -25,16 +24,11 @@ namespace Lootrun.hooks
             if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
                 return;
 
-            __instance.currentLevel = GameObject.Instantiate(__instance.levels[LootrunBase.currentRunSettings.moon]);
-            __instance.currentLevelID = LootrunBase.currentRunSettings.moon;
-            TimeOfDay.Instance.currentLevel = __instance.currentLevel;
-            RoundManager.Instance.currentLevel = __instance.currentLevel;
+            __instance.ChangeLevel(LootrunBase.currentRunSettings.moon);
 
             if (LootrunBase.currentRunSettings.weather == -2)
             {
                 __instance.currentLevel.currentWeather = __instance.currentLevel.randomWeathers[UnityEngine.Random.Range(0, __instance.currentLevel.randomWeathers.Length)].weatherType;
-
-                LootrunBase.mls.LogInfo("w - " + __instance.currentLevel.overrideWeatherType.ToString());
             }
             else
             {
@@ -56,7 +50,7 @@ namespace Lootrun.hooks
 
             StartOfRound.Instance.profitQuotaMonitorText.text = "PROFIT QUOTA:\nAll of them";
 
-            LootrunNetworkHandler.instance.SyncStatsClientRpc(LootrunBase.currentRunSettings.moon, (int)__instance.currentLevel.overrideWeatherType, LootrunBase.currentRunSettings.money);
+            LootrunNetworkHandler.instance.SyncStatsClientRpc(LootrunBase.currentRunSettings.moon, (int)__instance.currentLevel.currentWeather, LootrunBase.currentRunSettings.money);
         }
     }
 
@@ -313,8 +307,6 @@ namespace Lootrun.hooks
                 if (LootrunBase.currentRunSettings.weather == -2)
                 {
                     __instance.currentLevel.currentWeather = __instance.currentLevel.randomWeathers[UnityEngine.Random.Range(0, __instance.currentLevel.randomWeathers.Length)].weatherType;
-
-                    LootrunBase.mls.LogInfo("w - " + __instance.currentLevel.overrideWeatherType.ToString());
                 }
                 else
                 {
@@ -324,7 +316,7 @@ namespace Lootrun.hooks
                 __instance.ChangePlanet();
                 __instance.SetMapScreenInfoToCurrentLevel();
 
-                LootrunNetworkHandler.instance.SyncStatsClientRpc(LootrunBase.currentRunSettings.moon, (int)__instance.currentLevel.overrideWeatherType, LootrunBase.currentRunSettings.money);
+                LootrunNetworkHandler.instance.SyncStatsClientRpc(LootrunBase.currentRunSettings.moon, (int)__instance.currentLevel.currentWeather, LootrunBase.currentRunSettings.money);
 
                 return false;
             }

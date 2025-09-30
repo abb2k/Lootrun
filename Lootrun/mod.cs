@@ -15,7 +15,7 @@ namespace Lootrun
     {
         public const string GUID = "abb2k.Lootrun";
         public const string modName = "Lootrun";
-        public const string modVersion = "1.0.0.0";
+        public const string modVersion = "1.1.0.1";
 
         private readonly Harmony harmony = new Harmony(GUID);
 

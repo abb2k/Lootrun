@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace Lootrun
@@ -11,10 +12,18 @@ namespace Lootrun
     [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.FillEndGameStats))]
     internal class FillEndGameStatsPatch
     {
+        private static GameObject scrapTextObject;
+
         [HarmonyPostfix]
         static void FillEndGameStatsHook(HUDManager __instance)
         {
             if (!LootrunBase.isInLootrun) return;
+
+            if (scrapTextObject != null) GameObject.Destroy(scrapTextObject);
+
+            scrapTextObject = UnityEngine.Object.Instantiate<GameObject>(__instance.statsUIElements.quotaNumerator.gameObject, __instance.statsUIElements.quotaNumerator.transform.parent);
+            scrapTextObject.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Left;
+            scrapTextObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(52.5f, -165);
 
             float precentOfScrapCollected = ((float)LootrunBase.currentRunResults.scrapCollectedOutOf.x) / LootrunBase.currentRunResults.scrapCollectedOutOf.y * 100;
             __instance.statsUIElements.quotaNumerator.text = LootrunBase.SecsToTimer(LootrunBase.LootrunTime);
