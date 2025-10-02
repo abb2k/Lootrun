@@ -27,7 +27,6 @@ namespace Lootrun
 
         public static Sprite DialogueBox1Frame_5, BloodStain2, DialogueBoxSimple_1, DialogueBoxSimple, DropdownArrow;
 
-        public static LootrunSettings currentRunSettings = new LootrunSettings();
         public static LootrunResults currentRunResults = new LootrunResults();
 
         public static bool isInLootrun;
@@ -42,7 +41,7 @@ namespace Lootrun
         public static List<GrabbableObject> CurrentRoundBees = new List<GrabbableObject>();
         public static List<GrabbableObject> CurrentRoundSpecials = new List<GrabbableObject>();
 
-        public static List<Pair<LootrunSettings, LootrunResults>> allLootruns = new List<Pair<LootrunSettings, LootrunResults>>();
+        public static List<LootrunResults> allLootruns = new List<LootrunResults>();
 
         void Awake()
         {
@@ -90,7 +89,7 @@ namespace Lootrun
             harmony.PatchAll(typeof(LoadShipGrabbableItemsPatch));
             harmony.PatchAll(typeof(PlayerControllerBPatcher));
 
-            allLootruns = ES3.Load("allLootruns", Application.persistentDataPath + "/LootrunSave", new List<Pair<LootrunSettings, LootrunResults>>());
+            allLootruns = ES3.Load("allLootruns", Application.persistentDataPath + "/LootrunSave", new List<LootrunResults>());
             mls.LogInfo(allLootruns.Count);
 
             string location = Instance.Info.Location;
@@ -332,9 +331,9 @@ namespace Lootrun
             }
         }
 
-        public static void addRunToListAndSave(LootrunSettings settings, LootrunResults res)
+        public static void addRunToListAndSave(LootrunResults res)
         {
-            LootrunBase.allLootruns.Add(new Pair<LootrunSettings, LootrunResults>(settings, res));
+            LootrunBase.allLootruns.Add(res);
             ES3.Save("allLootruns", LootrunBase.allLootruns, Application.persistentDataPath + "/LootrunSave");
         }
     }

@@ -24,6 +24,7 @@ namespace Lootrun
             scrapTextObject = UnityEngine.Object.Instantiate<GameObject>(__instance.statsUIElements.quotaNumerator.gameObject, __instance.statsUIElements.quotaNumerator.transform.parent);
             scrapTextObject.GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Left;
             scrapTextObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(52.5f, -165);
+            scrapTextObject.name = "Scrap Collected Text";
 
             float precentOfScrapCollected = ((float)LootrunBase.currentRunResults.scrapCollectedOutOf.x) / LootrunBase.currentRunResults.scrapCollectedOutOf.y * 100;
             __instance.statsUIElements.quotaNumerator.text = LootrunBase.SecsToTimer(LootrunBase.LootrunTime);

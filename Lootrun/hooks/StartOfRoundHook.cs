@@ -26,9 +26,17 @@ namespace Lootrun.hooks
 
             __instance.ChangeLevel(LootrunBase.currentRunSettings.moon);
 
+            LootrunBase.mls.LogInfo($"weather is {LootrunBase.currentRunSettings.weather}");
+
             if (LootrunBase.currentRunSettings.weather == -2)
             {
-                __instance.currentLevel.currentWeather = __instance.currentLevel.randomWeathers[UnityEngine.Random.Range(0, __instance.currentLevel.randomWeathers.Length)].weatherType;
+                int watherIndex = UnityEngine.Random.Range(0, __instance.currentLevel.randomWeathers.Length);
+
+                LootrunBase.mls.LogInfo($"selected weather index {watherIndex}");
+                LootrunBase.mls.LogInfo($"weather possible types: {string.Join(", ", __instance.currentLevel.randomWeathers.Select(e => e.weatherType.ToString()))}");
+
+                __instance.currentLevel.currentWeather = __instance.currentLevel.randomWeathers[watherIndex].weatherType;
+                LootrunBase.mls.LogInfo($"selected weather {__instance.currentLevel.currentWeather.ToString()}");
             }
             else
             {
@@ -64,68 +72,68 @@ namespace Lootrun.hooks
             if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
                 return;
 
-            GameObject jetpackPrefab = null;
-            GameObject weedkillerPrefab = null;
+            //GameObject jetpackPrefab = null;
+            //GameObject weedkillerPrefab = null;
 
-            for (int i = 0; i < __instance.allItemsList.itemsList.Count; i++)
-            {
-                LootrunBase.mls.LogInfo(__instance.allItemsList.itemsList[i].itemName);
-                if (__instance.allItemsList.itemsList[i].itemName == "Jetpack")
-                {
-                    jetpackPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
-                }
+            //for (int i = 0; i < __instance.allItemsList.itemsList.Count; i++)
+            //{
+            //    LootrunBase.mls.LogInfo(__instance.allItemsList.itemsList[i].itemName);
+            //    if (__instance.allItemsList.itemsList[i].itemName == "Jetpack")
+            //    {
+            //        jetpackPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
+            //    }
 
-                if (__instance.allItemsList.itemsList[i].itemName == "Weed killer")
-                {
-                    weedkillerPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
-                }
-            }
+            //    if (__instance.allItemsList.itemsList[i].itemName == "Weed killer")
+            //    {
+            //        weedkillerPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
+            //    }
+            //}
 
-            if (LootrunBase.currentRunSettings.startJetpack)
-            {
-                for (int i = 0; i < 4; i++)
-                {
-                    GrabbableObject component = UnityEngine.Object.Instantiate(jetpackPrefab, new Vector3(-3.5f, 1, -14.5f), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
-                    component.fallTime = 1f;
-                    component.hasHitGround = true;
-                    component.scrapPersistedThroughRounds = true;
-                    component.isInElevator = true;
-                    component.isInShipRoom = true;
-                    component.NetworkObject.Spawn();
-                }
-            }
+            //if (LootrunBase.currentRunSettings.startJetpack)
+            //{
+            //    for (int i = 0; i < 4; i++)
+            //    {
+            //        GrabbableObject component = UnityEngine.Object.Instantiate(jetpackPrefab, new Vector3(-3.5f, 1, -14.5f), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
+            //        component.fallTime = 1f;
+            //        component.hasHitGround = true;
+            //        component.scrapPersistedThroughRounds = true;
+            //        component.isInElevator = true;
+            //        component.isInShipRoom = true;
+            //        component.NetworkObject.Spawn();
+            //    }
+            //}
 
-            GameObject crusierPrefab = null;
+            //GameObject crusierPrefab = null;
 
-            for (int i = 0; i < __instance.VehiclesList.Length; i++)
-            {
-                if (__instance.VehiclesList[i].name == "CompanyCruiser")
-                    crusierPrefab = __instance.VehiclesList[i];
-            }
+            //for (int i = 0; i < __instance.VehiclesList.Length; i++)
+            //{
+            //    if (__instance.VehiclesList[i].name == "CompanyCruiser")
+            //        crusierPrefab = __instance.VehiclesList[i];
+            //}
 
-            if (LootrunBase.currentRunSettings.startCrusier)
-            {
-                GameObject gameObject = UnityEngine.Object.Instantiate(crusierPrefab, __instance.magnetPoint.position + __instance.magnetPoint.forward * 5f, Quaternion.identity, RoundManager.Instance.VehiclesContainer);
-                __instance.attachedVehicle = gameObject.GetComponent<VehicleController>();
-                __instance.isObjectAttachedToMagnet = true;
-                __instance.attachedVehicle.NetworkObject.Spawn();
-                __instance.magnetOn = true;
-                __instance.magnetLever.initialBoolState = true;
-                __instance.magnetLever.setInitialState = true;
-                __instance.magnetLever.SetInitialState();
+            //if (LootrunBase.currentRunSettings.startCrusier)
+            //{
+            //    GameObject gameObject = UnityEngine.Object.Instantiate(crusierPrefab, __instance.magnetPoint.position + __instance.magnetPoint.forward * 5f, Quaternion.identity, RoundManager.Instance.VehiclesContainer);
+            //    __instance.attachedVehicle = gameObject.GetComponent<VehicleController>();
+            //    __instance.isObjectAttachedToMagnet = true;
+            //    __instance.attachedVehicle.NetworkObject.Spawn();
+            //    __instance.magnetOn = true;
+            //    __instance.magnetLever.initialBoolState = true;
+            //    __instance.magnetLever.setInitialState = true;
+            //    __instance.magnetLever.SetInitialState();
 
-                if (weedkillerPrefab)
-                    for (int i = 0; i < 2; i++)
-                    {
-                        GrabbableObject component = UnityEngine.Object.Instantiate(weedkillerPrefab, new Vector3(10, 1.5f, -13), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
-                        component.fallTime = 1f;
-                        component.hasHitGround = true;
-                        component.scrapPersistedThroughRounds = true;
-                        component.isInElevator = true;
-                        component.isInShipRoom = true;
-                        component.NetworkObject.Spawn();
-                    }
-            }
+            //    if (weedkillerPrefab)
+            //        for (int i = 0; i < 2; i++)
+            //        {
+            //            GrabbableObject component = UnityEngine.Object.Instantiate(weedkillerPrefab, new Vector3(10, 1.5f, -13), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
+            //            component.fallTime = 1f;
+            //            component.hasHitGround = true;
+            //            component.scrapPersistedThroughRounds = true;
+            //            component.isInElevator = true;
+            //            component.isInShipRoom = true;
+            //            component.NetworkObject.Spawn();
+            //        }
+            //}
         }
     }
 

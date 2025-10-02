@@ -15,10 +15,8 @@ namespace Lootrun.hooks
         [HarmonyPrefix]
         static bool SetShipToLeaveOnMidnightClientRpcPatch()
         {
-            if (LootrunBase.isInLootrun && LootrunBase.currentRunSettings.isEndless)
-            {
-                return false;
-            }
+            if (LootrunBase.isInLootrun && LootrunBase.currentRunSettings.isEndless) return false;
+
             return true;
         }
     }
@@ -49,7 +47,6 @@ namespace Lootrun.hooks
                 LootrunBase.timerText.text = LootrunBase.SecsToTimer(LootrunBase.LootrunTime);
 
                 LootrunNetworkHandler.instance.SyncLootrunTimerClientRpc(LootrunBase.LootrunTime);
-
             }
         }
 
