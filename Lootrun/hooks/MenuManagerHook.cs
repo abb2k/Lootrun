@@ -10,6 +10,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// TODO:
+// update UI in unity assetBundle --X
+// make UI actually live update currentRunSettings --X
+// fix host bug (check how hosting is done in vanilla) --X
+// make items actually spawn correctly spawn (maybe create set spawn locations would be cool) --X
+// make saving to files work --X
+// make old run view list --X
+
 namespace Lootrun.hooks
 {
     [HarmonyPatch(typeof(MenuManager))]
@@ -95,7 +103,7 @@ namespace Lootrun.hooks
             SCrusierToggle.onValueChanged.AddListener(UpdateBest);
             LootrunBase.mls.LogInfo("6");
 
-            LootrunBase.mls.LogInfo($"{(isEndlessToggle == null ? "null" : "yay")}, ");
+            // LootrunBase.mls.LogInfo($"{(isEndlessToggle == null ? "null" : "yay")}, ");
 
             isEndlessToggle.onValueChanged.AddListener(UpdateBest);
             LootrunBase.mls.LogInfo("7");
@@ -150,11 +158,11 @@ namespace Lootrun.hooks
 
             weatherDropdown.AddOptions(weatherOptions);
 
-            if (LootrunBase.currentRunSettings.weather == -2)
+            if (LootrunBase.currentRunSettings.weatherType == -2)
                 weatherDropdown.value = 0;
             else
             {
-                LevelWeatherType w = (LevelWeatherType)LootrunBase.currentRunSettings.weather;
+                LevelWeatherType w = (LevelWeatherType)LootrunBase.currentRunSettings.weatherType;
 
                 for (int i = 0; i < weatherDropdown.options.Count; i++)
                 {
@@ -185,11 +193,11 @@ namespace Lootrun.hooks
 
             LootrunBase.mls.LogInfo("post moons/weather");
 
-            beesToggle.isOn = LootrunBase.currentRunSettings.bees;
-            randomSeedToggle.isOn = LootrunBase.currentRunSettings.randomseed;
-            SCrusierToggle.isOn = LootrunBase.currentRunSettings.startCrusier;
-            SJetpacksToggle.isOn = LootrunBase.currentRunSettings.startJetpack;
-            specialsToggle.isOn = LootrunBase.currentRunSettings.spacials;
+            beesToggle.isOn = LootrunBase.currentRunSettings.countBees;
+            randomSeedToggle.isOn = LootrunBase.currentRunSettings.seed == -1 ? false : true;
+            //SCrusierToggle.isOn = LootrunBase.currentRunSettings.startCrusier;
+            //SJetpacksToggle.isOn = LootrunBase.currentRunSettings.startJetpack;
+            specialsToggle.isOn = LootrunBase.currentRunSettings.countSpecials;
 
             isEndlessToggle.isOn = LootrunBase.currentRunSettings.isEndless;
 
@@ -260,39 +268,6 @@ namespace Lootrun.hooks
                 speedlootMenuContainer.SetActive(false);
                 LootrunBase.isInLootrun = true;
                 GameNetworkManager.Instance.currentSaveFileName = "Speedloot";
-                LootrunSettings s = new LootrunSettings();
-
-                s.moon = LootrunBase.MoonNameToID(moonsDropdown.options[moonsDropdown.value].text);
-
-                if (weatherDropdown.options[weatherDropdown.value].text == "Random")
-                {
-                    s.weather = -2;
-                }
-                else
-                {
-                    s.weather = (int)LootrunBase.weatherNameToType(weatherDropdown.options[weatherDropdown.value].text);
-                    LootrunBase.mls.LogInfo("weather " + s.weather);
-                }
-
-                s.bees = beesToggle.isOn;
-                s.spacials = specialsToggle.isOn;
-                s.startJetpack = SJetpacksToggle.isOn;
-                s.startCrusier = SCrusierToggle.isOn;
-                s.randomseed = randomSeedToggle.isOn;
-
-                s.isEndless = isEndlessToggle.isOn;
-
-                if (int.TryParse(seedInput.text, out int resSeed))
-                    s.seed = resSeed;
-                else
-                    s.seed = 0;
-
-                if (int.TryParse(moneyAmountInput.text, out int resMoney))
-                    s.money = resMoney;
-                else
-                    s.money = 0;
-
-                LootrunBase.currentRunSettings = s;
 
                 GameNetworkManager.Instance.StartHost();
             });
