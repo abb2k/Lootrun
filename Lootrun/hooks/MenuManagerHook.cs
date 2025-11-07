@@ -84,6 +84,8 @@ namespace Lootrun.hooks
             {
                 speedlootMenuContainer.SetActive(true);
             });
+
+            settingsMenu.itemSelectMenu.transform.SetAsLastSibling();
         }
 
         static GameObject CopyCoolButton(string objectName, Transform parent, Vector2 size, string btnText, UnityAction callback)

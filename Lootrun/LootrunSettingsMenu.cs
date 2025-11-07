@@ -35,7 +35,7 @@ public class LootrunSettingsMenu : MonoBehaviour
 
     [SerializeField] private GameObject itemCellPrefab;
     [SerializeField] private Transform itemsHolder;
-    [SerializeField] private GameObject itemSelectMenu;
+    public GameObject itemSelectMenu;
     [SerializeField] private Transform itemSelectMenuParent;
 
     private void Start()
