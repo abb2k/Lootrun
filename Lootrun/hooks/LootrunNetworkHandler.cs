@@ -46,12 +46,12 @@ namespace Lootrun.hooks
         }
 
         [ClientRpc]
-        public void SyncLootrunResultsClientRpc(LootrunSettings s, LootrunResults res)
+        public void SyncLootrunResultsClientRpc(LootrunPreset s, LootrunResults res)
         {
             if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
                 return;
             LootrunBase.currentRunSettings = s;
-            LootrunBase.currentRunResults = res;
+            LootrunBase.currentRunResult = res;
         }
 
         [ClientRpc]

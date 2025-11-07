@@ -13,7 +13,6 @@ namespace Lootrun
         [HarmonyPostfix]
         static void Hook(KnifeItem __instance)
         {
-            LootrunBase.mls.LogInfo("KNIFE IS HERE YAY");
             if (!LootrunBase.isInLootrun) return;
 
             LootrunBase.CurrentRoundSpecials.Add(__instance);

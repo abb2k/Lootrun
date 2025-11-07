@@ -26,9 +26,9 @@ namespace Lootrun.hooks
 
             __instance.ChangeLevel(LootrunBase.currentRunSettings.moon);
 
-            LootrunBase.mls.LogInfo($"weather is {LootrunBase.currentRunSettings.weather}");
+            LootrunBase.mls.LogInfo($"weather is {LootrunBase.currentRunSettings.weatherType}");
 
-            if (LootrunBase.currentRunSettings.weather == -2)
+            if (LootrunBase.currentRunSettings.weatherType == -2)
             {
                 int watherIndex = UnityEngine.Random.Range(0, __instance.currentLevel.randomWeathers.Length);
 
@@ -40,7 +40,7 @@ namespace Lootrun.hooks
             }
             else
             {
-                __instance.currentLevel.currentWeather = (LevelWeatherType)LootrunBase.currentRunSettings.weather;
+                __instance.currentLevel.currentWeather = (LevelWeatherType)LootrunBase.currentRunSettings.weatherType;
             }
 
             TimeOfDay timeOfDay = UnityEngine.Object.FindObjectOfType<TimeOfDay>();
@@ -51,7 +51,7 @@ namespace Lootrun.hooks
             __instance.ChangePlanet();
             __instance.SetMapScreenInfoToCurrentLevel();
 
-            __instance.overrideRandomSeed = !LootrunBase.currentRunSettings.randomseed;
+            __instance.overrideRandomSeed = LootrunBase.currentRunSettings.seed != -1;
             __instance.overrideSeedNumber = LootrunBase.currentRunSettings.seed;
 
             StartOfRound.Instance.deadlineMonitorText.text = "DEADLINE:\nNever";
@@ -72,68 +72,76 @@ namespace Lootrun.hooks
             if (!(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer))
                 return;
 
-            //GameObject jetpackPrefab = null;
-            //GameObject weedkillerPrefab = null;
+            SpawnStartItems(__instance);
+        }
+        public static void SpawnStartItems(StartOfRound SOR)
+        {
+            List<(GameObject, int)> itemPrefabs = new List<(GameObject, int)>();
 
-            //for (int i = 0; i < __instance.allItemsList.itemsList.Count; i++)
-            //{
-            //    LootrunBase.mls.LogInfo(__instance.allItemsList.itemsList[i].itemName);
-            //    if (__instance.allItemsList.itemsList[i].itemName == "Jetpack")
-            //    {
-            //        jetpackPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
-            //    }
+            for (int i = 0; i < LootrunBase.currentRunSettings.items.Count; i++)
+            {
+                var foundItemIndex = SOR.allItemsList.itemsList.FindIndex(x => x.itemName.Equals(LootrunBase.currentRunSettings.items[i].itemName));
+                if (foundItemIndex != -1)
+                {
+                    itemPrefabs.Add((SOR.allItemsList.itemsList[foundItemIndex].spawnPrefab, LootrunBase.currentRunSettings.items[i].quantity));
+                }
+            }
 
-            //    if (__instance.allItemsList.itemsList[i].itemName == "Weed killer")
-            //    {
-            //        weedkillerPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
-            //    }
-            //}
+            foreach (var item in itemPrefabs)
+            {
+                for (int i = 0; i < item.Item2; i++)
+                {
+                    GrabbableObject component = UnityEngine.Object.Instantiate(item.Item1, new Vector3(-3.5f, 1, -14.5f), Quaternion.identity, SOR.elevatorTransform).GetComponent<GrabbableObject>();
+                    component.fallTime = 1f;
+                    component.hasHitGround = true;
+                    component.scrapPersistedThroughRounds = true;
+                    component.isInElevator = true;
+                    component.isInShipRoom = true;
+                    component.NetworkObject.Spawn();
+                }
+            }
 
-            //if (LootrunBase.currentRunSettings.startJetpack)
-            //{
-            //    for (int i = 0; i < 4; i++)
-            //    {
-            //        GrabbableObject component = UnityEngine.Object.Instantiate(jetpackPrefab, new Vector3(-3.5f, 1, -14.5f), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
-            //        component.fallTime = 1f;
-            //        component.hasHitGround = true;
-            //        component.scrapPersistedThroughRounds = true;
-            //        component.isInElevator = true;
-            //        component.isInShipRoom = true;
-            //        component.NetworkObject.Spawn();
-            //    }
-            //}
+            GameObject crusierPrefab = null;
 
-            //GameObject crusierPrefab = null;
+            for (int i = 0; i < SOR.VehiclesList.Length; i++)
+            {
+                if (SOR.VehiclesList[i].name == "CompanyCruiser")
+                    crusierPrefab = SOR.VehiclesList[i];
+            }
 
-            //for (int i = 0; i < __instance.VehiclesList.Length; i++)
-            //{
-            //    if (__instance.VehiclesList[i].name == "CompanyCruiser")
-            //        crusierPrefab = __instance.VehiclesList[i];
-            //}
+            if (LootrunBase.currentRunSettings.cruiserOnStart)
+            {
+                GameObject gameObject = UnityEngine.Object.Instantiate(crusierPrefab, SOR.magnetPoint.position + SOR.magnetPoint.forward * 5f, Quaternion.identity, RoundManager.Instance.VehiclesContainer);
+                SOR.attachedVehicle = gameObject.GetComponent<VehicleController>();
+                SOR.isObjectAttachedToMagnet = true;
+                SOR.attachedVehicle.NetworkObject.Spawn();
+                SOR.magnetOn = true;
+                SOR.magnetLever.initialBoolState = true;
+                SOR.magnetLever.setInitialState = true;
+                SOR.magnetLever.SetInitialState();
 
-            //if (LootrunBase.currentRunSettings.startCrusier)
-            //{
-            //    GameObject gameObject = UnityEngine.Object.Instantiate(crusierPrefab, __instance.magnetPoint.position + __instance.magnetPoint.forward * 5f, Quaternion.identity, RoundManager.Instance.VehiclesContainer);
-            //    __instance.attachedVehicle = gameObject.GetComponent<VehicleController>();
-            //    __instance.isObjectAttachedToMagnet = true;
-            //    __instance.attachedVehicle.NetworkObject.Spawn();
-            //    __instance.magnetOn = true;
-            //    __instance.magnetLever.initialBoolState = true;
-            //    __instance.magnetLever.setInitialState = true;
-            //    __instance.magnetLever.SetInitialState();
+                var weedKillerIndex = SOR.allItemsList.itemsList.FindIndex(x => x.itemName.Equals("Weed killer"));
 
-            //    if (weedkillerPrefab)
-            //        for (int i = 0; i < 2; i++)
-            //        {
-            //            GrabbableObject component = UnityEngine.Object.Instantiate(weedkillerPrefab, new Vector3(10, 1.5f, -13), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
-            //            component.fallTime = 1f;
-            //            component.hasHitGround = true;
-            //            component.scrapPersistedThroughRounds = true;
-            //            component.isInElevator = true;
-            //            component.isInShipRoom = true;
-            //            component.NetworkObject.Spawn();
-            //        }
-            //}
+                if (weedKillerIndex != -1)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        GrabbableObject component = UnityEngine.Object.Instantiate(
+                            SOR.allItemsList.itemsList[weedKillerIndex].spawnPrefab,
+                            new Vector3(10, 1.5f, -13),
+                            Quaternion.identity,
+                            SOR.elevatorTransform
+                        ).GetComponent<GrabbableObject>();
+
+                        component.fallTime = 1f;
+                        component.hasHitGround = true;
+                        component.scrapPersistedThroughRounds = true;
+                        component.isInElevator = true;
+                        component.isInShipRoom = true;
+                        component.NetworkObject.Spawn();
+                    }
+                }
+            }
         }
     }
 
@@ -171,24 +179,25 @@ namespace Lootrun.hooks
                 if (LootrunBase.CurrentRoundScrap.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
                     validScrapCount++;
 
-                if (LootrunBase.currentRunSettings.bees && LootrunBase.CurrentRoundBees.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
+                if (LootrunBase.currentRunSettings.countBees && LootrunBase.CurrentRoundBees.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
                     validScrapCount++;
 
-                if (LootrunBase.currentRunSettings.spacials && LootrunBase.CurrentRoundSpecials.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
+                if (LootrunBase.currentRunSettings.countSpecials && LootrunBase.CurrentRoundSpecials.Contains(RoundManager.Instance.scrapCollectedThisRound[i]))
                     validScrapCount++;
             }
 
             int scrapCount = LootrunBase.CurrentRoundScrap.Count;
-            if (LootrunBase.currentRunSettings.bees)
+            if (LootrunBase.currentRunSettings.countBees)
                 scrapCount += LootrunBase.CurrentRoundBees.Count;
-            if (LootrunBase.currentRunSettings.spacials)
+            if (LootrunBase.currentRunSettings.countSpecials)
                 scrapCount += LootrunBase.CurrentRoundSpecials.Count;
 
             res.players = LootrunBase.playersThisRound;
+            res.presetUsed = LootrunBase.currentRunSettings;
             res.time = LootrunBase.LootrunTime;
             res.scrapCollectedOutOf = new Vector2Int(validScrapCount, scrapCount);
 
-            LootrunBase.currentRunResults = res;
+            LootrunBase.currentRunResult = res;
 
             LootrunNetworkHandler.instance.SyncLootrunResultsClientRpc(LootrunBase.currentRunSettings, res);
         }
@@ -204,7 +213,7 @@ namespace Lootrun.hooks
             {
                 HUDManager.Instance.saveDataIconAnimatorB.SetTrigger("save");
 
-                LootrunBase.addRunToListAndSave(LootrunBase.currentRunSettings, LootrunBase.currentRunResults);
+                //LootrunBase.addRunToListAndSave(LootrunBase.currentRunSettings, LootrunBase.currentRunResult);
 
                 //reset everything back to normal
 
@@ -246,79 +255,18 @@ namespace Lootrun.hooks
                         GameObject.Destroy(__instance.attachedVehicle.gameObject);
                 }
 
-                GameObject jetpackPrefab = null;
-                GameObject weedkillerPrefab = null;
-
-                for (int i = 0; i < __instance.allItemsList.itemsList.Count; i++)
-                {
-                    LootrunBase.mls.LogInfo(__instance.allItemsList.itemsList[i].itemName);
-                    if (__instance.allItemsList.itemsList[i].itemName == "Jetpack")
-                    {
-                        jetpackPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
-                    }
-
-                    if (__instance.allItemsList.itemsList[i].itemName == "Weed killer")
-                    {
-                        weedkillerPrefab = __instance.allItemsList.itemsList[i].spawnPrefab;
-                    }
-                }
-
-                if (LootrunBase.currentRunSettings.startJetpack)
-                {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        GrabbableObject component = UnityEngine.Object.Instantiate(jetpackPrefab, new Vector3(-3.5f, 1, -14.5f), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
-                        component.fallTime = 1f;
-                        component.hasHitGround = true;
-                        component.scrapPersistedThroughRounds = true;
-                        component.isInElevator = true;
-                        component.isInShipRoom = true;
-                        component.NetworkObject.Spawn();
-                    }
-                }
-
-                GameObject crusierPrefab = null;
-
-                for (int i = 0; i < __instance.VehiclesList.Length; i++)
-                {
-                    if (__instance.VehiclesList[i].name == "CompanyCruiser")
-                        crusierPrefab = __instance.VehiclesList[i];
-                }
-
-                if (LootrunBase.currentRunSettings.startCrusier)
-                {
-                    GameObject gameObject = UnityEngine.Object.Instantiate(crusierPrefab, __instance.magnetPoint.position + __instance.magnetPoint.forward * 5f, Quaternion.identity, RoundManager.Instance.VehiclesContainer);
-                    __instance.attachedVehicle = gameObject.GetComponent<VehicleController>();
-                    __instance.isObjectAttachedToMagnet = true;
-                    __instance.attachedVehicle.NetworkObject.Spawn();
-                    __instance.magnetOn = true;
-                    __instance.magnetLever.initialBoolState = true;
-                    __instance.magnetLever.setInitialState = true;
-                    __instance.magnetLever.SetInitialState();
-
-                    if (weedkillerPrefab)
-                        for (int i = 0; i < 2; i++)
-                        {
-                            GrabbableObject component = UnityEngine.Object.Instantiate(weedkillerPrefab, new Vector3(10, 1.5f, -13), Quaternion.identity, __instance.elevatorTransform).GetComponent<GrabbableObject>();
-                            component.fallTime = 1f;
-                            component.hasHitGround = true;
-                            component.scrapPersistedThroughRounds = true;
-                            component.isInElevator = true;
-                            component.isInShipRoom = true;
-                            component.NetworkObject.Spawn();
-                        }
-                }
+                LoadShipGrabbableItemsPatch.SpawnStartItems(__instance);
 
                 Terminal t = GameObject.FindObjectOfType<Terminal>();
                 t.groupCredits = LootrunBase.currentRunSettings.money;
 
-                if (LootrunBase.currentRunSettings.weather == -2)
+                if (LootrunBase.currentRunSettings.weatherType == -2)
                 {
                     __instance.currentLevel.currentWeather = __instance.currentLevel.randomWeathers[UnityEngine.Random.Range(0, __instance.currentLevel.randomWeathers.Length)].weatherType;
                 }
                 else
                 {
-                    __instance.currentLevel.currentWeather = (LevelWeatherType)LootrunBase.currentRunSettings.weather;
+                    __instance.currentLevel.currentWeather = (LevelWeatherType)LootrunBase.currentRunSettings.weatherType;
                 }
 
                 __instance.ChangePlanet();

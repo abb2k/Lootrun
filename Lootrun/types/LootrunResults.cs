@@ -7,13 +7,13 @@ namespace Lootrun.types
     public class LootrunResults : INetworkSerializable
     {
         [SerializeField]
-        public List<string> players;
+        public List<string> players = new List<string>();
         [SerializeField]
         public float time;
         [SerializeField]
         public Vector2Int scrapCollectedOutOf;
         [SerializeField]
-        public LootrunPreset presetUsed;
+        public LootrunPreset presetUsed = new LootrunPreset();
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {

@@ -9,15 +9,17 @@ namespace Lootrun.types
     public class LootrunPreset : INetworkSerializable
     {
         [SerializeField]
-        public string presetName;
+        public string presetName = string.Empty;
         [SerializeField]
-        public List<LootrunItemQuantity> items;
+        public List<LootrunItemQuantity> items = new List<LootrunItemQuantity>();
         [SerializeField]
         public int moon;
         [SerializeField]
         public int weatherType = -2;
         [SerializeField]
-        public bool countBees;
+        public bool countBees = true;
+        [SerializeField]
+        public bool cruiserOnStart;
         [SerializeField]
         public bool countSpecials;
         [SerializeField]
@@ -47,7 +49,12 @@ namespace Lootrun.types
             {
                 for (int i = 0; i < count; i++)
                 {
+                    if (items.Count == i) break;
+
                     var item = items[i];
+
+                    if (item == null) continue;
+
                     serializer.SerializeValue(ref item);
                 }
             }
@@ -55,6 +62,7 @@ namespace Lootrun.types
             serializer.SerializeValue(ref moon);
             serializer.SerializeValue(ref weatherType);
             serializer.SerializeValue(ref countBees);
+            serializer.SerializeValue(ref cruiserOnStart);
             serializer.SerializeValue(ref countSpecials);
             serializer.SerializeValue(ref isEndless);
             serializer.SerializeValue(ref seed);

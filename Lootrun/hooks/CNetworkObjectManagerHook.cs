@@ -21,7 +21,6 @@ namespace Lootrun.hooks
                 return;
 
             networkPrefab = LootrunBase.bundle.LoadAsset<GameObject>("NetPrefab");
-            networkPrefab.AddComponent<LootrunNetworkHandler>();
             NetworkManager.Singleton.AddNetworkPrefab(networkPrefab);
         }
 

@@ -3,6 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Lootrun.hooks;
 using Lootrun.types;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
@@ -28,12 +29,13 @@ namespace Lootrun
         public static Sprite DialogueBox1Frame_5, BloodStain2, DialogueBoxSimple_1, DialogueBoxSimple, DropdownArrow;
 
         public static LootrunPreset currentRunSettings = new LootrunPreset();
+        public static LootrunResults currentRunResult = new LootrunResults();
 
         public static bool isInLootrun;
 
         public static float LootrunTime;
 
-        public static int playersThisRound;
+        public static List<string> playersThisRound = new List<string>();
 
         public static TextMeshProUGUI timerText;
 

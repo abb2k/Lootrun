@@ -26,9 +26,9 @@ namespace Lootrun
             scrapTextObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(52.5f, -165);
             scrapTextObject.name = "Scrap Collected Text";
 
-            float precentOfScrapCollected = ((float)LootrunBase.currentRunResults.scrapCollectedOutOf.x) / LootrunBase.currentRunResults.scrapCollectedOutOf.y * 100;
+            float precentOfScrapCollected = ((float)LootrunBase.currentRunResult.scrapCollectedOutOf.x) / LootrunBase.currentRunResult.scrapCollectedOutOf.y * 100;
             __instance.statsUIElements.quotaNumerator.text = LootrunBase.SecsToTimer(LootrunBase.LootrunTime);
-            __instance.statsUIElements.quotaDenominator.text = string.Format("{0}/{1}({2}%)", LootrunBase.currentRunResults.scrapCollectedOutOf.x, LootrunBase.currentRunResults.scrapCollectedOutOf.y, (int)precentOfScrapCollected);
+            __instance.statsUIElements.quotaDenominator.text = string.Format("{0}/{1}({2}%)", LootrunBase.currentRunResult.scrapCollectedOutOf.x, LootrunBase.currentRunResult.scrapCollectedOutOf.y, (int)precentOfScrapCollected);
             RectTransform bettomT = __instance.statsUIElements.quotaDenominator.GetComponent<RectTransform>();
             bettomT.sizeDelta = new Vector2(bettomT.sizeDelta.x + 500, bettomT.sizeDelta.y);
         }

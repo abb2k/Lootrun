@@ -9,13 +9,13 @@ namespace Lootrun.types
     public class LootrunItemQuantity : INetworkSerializable
     {
         [SerializeField]
-        public int itemID;
+        public string itemName = string.Empty;
         [SerializeField]
         public int quantity;
 
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
-            serializer.SerializeValue(ref itemID);
+            serializer.SerializeValue(ref itemName);
             serializer.SerializeValue(ref quantity);
         }
     }

@@ -22,7 +22,12 @@ namespace Lootrun
             LootrunBase.CurrentRoundBees.Clear();
             LootrunBase.CurrentRoundSpecials.Clear();
             LootrunBase.LootrunTime = 0;
-            LootrunBase.playersThisRound = StartOfRound.Instance.connectedPlayersAmount + 1;
+            LootrunBase.playersThisRound.Clear();
+            foreach (var player in StartOfRound.Instance.allPlayerScripts)
+            {
+                if (player == null) continue;
+                LootrunBase.playersThisRound.Add(player.playerUsername);
+            }
         }
     }
 }
