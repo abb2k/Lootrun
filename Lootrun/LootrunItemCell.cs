@@ -41,6 +41,12 @@ public class LootrunItemCell : MonoBehaviour
         toEnable.ForEach(x => x.SetActive(true));
     }
 
+    public void DisableAll()
+    {
+        selectMode.ForEach(x => x.SetActive(false));
+        countMode.ForEach(x => x.SetActive(false));
+    }
+
     public void OnMinusClicked()
     {
         itemData.quantity -= 1;

@@ -26,6 +26,9 @@ namespace Lootrun
             foreach (var player in StartOfRound.Instance.allPlayerScripts)
             {
                 if (player == null) continue;
+
+                if (player.playerUsername.Any(char.IsDigit)) continue;
+
                 LootrunBase.playersThisRound.Add(player.playerUsername);
             }
         }

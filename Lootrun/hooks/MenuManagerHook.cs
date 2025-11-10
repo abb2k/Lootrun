@@ -65,7 +65,7 @@ namespace Lootrun.hooks
 
             var speedlootOldRuns = CopyCoolButton("speedlootOldRuns", speedlootMenuContainer.transform, new Vector2(130, 30), "[ Runs ]", () =>
             {
-                
+                settingsMenu.OnOldRunsClicked();
             });
             speedlootOldRuns.transform.localPosition = new Vector3(175, -70, 0);
 
@@ -86,6 +86,7 @@ namespace Lootrun.hooks
             });
 
             settingsMenu.itemSelectMenu.transform.SetAsLastSibling();
+            settingsMenu.oldRunsPage.transform.SetAsLastSibling();
         }
 
         static GameObject CopyCoolButton(string objectName, Transform parent, Vector2 size, string btnText, UnityAction callback)

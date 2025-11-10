@@ -5,6 +5,7 @@ using Lootrun.hooks;
 using Lootrun.types;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace Lootrun
     {
         public const string GUID = "abb2k.Lootrun";
         public const string modName = "Lootrun";
-        public const string modVersion = "1.1.0.1";
+        public const string modVersion = "1.2.0.0";
 
         private readonly Harmony harmony = new Harmony(GUID);
 
@@ -88,9 +89,6 @@ namespace Lootrun
             harmony.PatchAll(typeof(AutoSaveShipDataPatch));
             harmony.PatchAll(typeof(LoadShipGrabbableItemsPatch));
             harmony.PatchAll(typeof(PlayerControllerBPatcher));
-
-            //allLootruns = ES3.Load("allLootruns", Application.persistentDataPath + "/LootrunSave", new List<LootrunResults>());
-            //mls.LogInfo(allLootruns.Count);
 
             string location = Instance.Info.Location;
             location = location.TrimEnd("Lootrun.dll".ToCharArray());
@@ -331,10 +329,38 @@ namespace Lootrun
             }
         }
 
-        public static void addRunToListAndSave(LootrunResults res)
+        public static void SaveResults(LootrunResults res)
         {
-            //LootrunBase.allLootruns.Add(res);
-            //ES3.Save("allLootruns", LootrunBase.allLootruns, Application.persistentDataPath + "/LootrunSave");
+            string dirPath = Application.persistentDataPath + "/Lootruns";
+
+            if (!Directory.Exists(dirPath))
+                Directory.CreateDirectory(dirPath);
+
+            int fileNameCount = 0;
+
+            string path = dirPath + "/" + DateTime.Now.ToString().Replace('/', '_').Replace(':', '-');
+
+            string modifiedPath = path;
+
+            while (true)
+            {
+                if (File.Exists(modifiedPath))
+                {
+                    fileNameCount++;
+
+                    modifiedPath = path + $" ({fileNameCount})";
+
+                    continue;
+                }
+                else
+                {
+                    path = modifiedPath;
+
+                    break;
+                }
+            }
+
+            ES3.Save("Lootrun", res, path);
         }
     }
 }

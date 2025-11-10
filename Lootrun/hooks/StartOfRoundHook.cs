@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TMPro;
@@ -26,17 +27,11 @@ namespace Lootrun.hooks
 
             __instance.ChangeLevel(LootrunBase.currentRunSettings.moon);
 
-            LootrunBase.mls.LogInfo($"weather is {LootrunBase.currentRunSettings.weatherType}");
-
             if (LootrunBase.currentRunSettings.weatherType == -2)
             {
                 int watherIndex = UnityEngine.Random.Range(0, __instance.currentLevel.randomWeathers.Length);
 
-                LootrunBase.mls.LogInfo($"selected weather index {watherIndex}");
-                LootrunBase.mls.LogInfo($"weather possible types: {string.Join(", ", __instance.currentLevel.randomWeathers.Select(e => e.weatherType.ToString()))}");
-
                 __instance.currentLevel.currentWeather = __instance.currentLevel.randomWeathers[watherIndex].weatherType;
-                LootrunBase.mls.LogInfo($"selected weather {__instance.currentLevel.currentWeather.ToString()}");
             }
             else
             {
@@ -53,6 +48,11 @@ namespace Lootrun.hooks
 
             __instance.overrideRandomSeed = LootrunBase.currentRunSettings.seed != -1;
             __instance.overrideSeedNumber = LootrunBase.currentRunSettings.seed;
+
+            foreach (var item in __instance.levels)
+            {
+                LootrunBase.mls.LogInfo($"{item.PlanetName} - {item.levelID}");
+            }
 
             StartOfRound.Instance.deadlineMonitorText.text = "DEADLINE:\nNever";
 
@@ -213,7 +213,7 @@ namespace Lootrun.hooks
             {
                 HUDManager.Instance.saveDataIconAnimatorB.SetTrigger("save");
 
-                //LootrunBase.addRunToListAndSave(LootrunBase.currentRunSettings, LootrunBase.currentRunResult);
+                LootrunBase.SaveResults(LootrunBase.currentRunResult);
 
                 //reset everything back to normal
 

@@ -4,6 +4,7 @@ using Lootrun.types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
@@ -38,19 +39,22 @@ public class LootrunSettingsMenu : MonoBehaviour
     public GameObject itemSelectMenu;
     [SerializeField] private Transform itemSelectMenuParent;
 
+    private List<string> weathersInOrder = new List<string>();
+
+    [Space]
+
+    public GameObject oldRunsPage;
+    [SerializeField] private Transform runCellsContainer;
+    [SerializeField] private GameObject runCellPrefab;
+
     private void Start()
     {
-        var weatherOptions = new List<TMP_Dropdown.OptionData>();
         var weatherNames = Enum.GetNames(typeof(LevelWeatherType));
 
-        weatherOptions.Add(new TMP_Dropdown.OptionData("Random"));
         foreach (var name in weatherNames)
-        {
-            weatherOptions.Add(new TMP_Dropdown.OptionData(name));
-        }
+            weathersInOrder.Add(name);
 
-        weatherDropdown.AddOptions(weatherOptions);
-        weatherDropdown.RefreshShownValue();
+        UpdateWeathersOnList();
 
         List<TMP_Dropdown.OptionData> moonsOptions = new List<TMP_Dropdown.OptionData>
         {
@@ -83,6 +87,33 @@ public class LootrunSettingsMenu : MonoBehaviour
 
             cellScript.Setup(item.itemProperties, 1, true);
             cellScript.onSelectClicked += OnCellSelected;
+        }
+
+        string dirPath = Application.persistentDataPath + "/Lootruns";
+
+        if (Directory.Exists(dirPath))
+        {
+            var saveFiles = Directory.GetFiles(dirPath);
+
+            foreach (var file in saveFiles)
+            {
+                try
+                {
+                    var lootrunResult = ES3.Load<LootrunResults>("Lootrun", Path.GetFullPath(file));
+                    if (lootrunResult == null) continue;
+                    var runCell = Instantiate(runCellPrefab, runCellsContainer);
+
+                    var cellScript = runCell.GetComponent<LootrunRunCell>();
+                    cellScript.SetSettingsMenuRef(this);
+                    cellScript.Setup(lootrunResult);
+                    cellScript.OnUseCallback += (LootrunPreset preset) =>
+                    {
+                        SetToPreset(preset);
+                        oldRunsPage.SetActive(false);
+                    };
+                }
+                catch (Exception) { }
+            }
         }
 
         SetToPreset(myPreset);
@@ -133,6 +164,30 @@ public class LootrunSettingsMenu : MonoBehaviour
         }
 
         UpdateSeedInputVisibility();
+
+        SendChanges();
+    }
+
+    void UpdateWeathersOnList()
+    {
+        weatherDropdown.ClearOptions();
+
+        var weatherOptions = new List<TMP_Dropdown.OptionData>();
+        weatherOptions.Add(new TMP_Dropdown.OptionData("Random"));
+
+        var moonWeathers = LootrunBase.MoonAvalableWeathers(myPreset.moon);
+
+        foreach (var name in weathersInOrder)
+        {
+            if (!Enum.TryParse(name, out LevelWeatherType weather)) continue;
+
+            if (!moonWeathers.Contains(weather)) continue;
+
+            weatherOptions.Add(new TMP_Dropdown.OptionData(name));
+        }
+
+        weatherDropdown.AddOptions(weatherOptions);
+        weatherDropdown.RefreshShownValue();
     }
 
     void OnItemCellChanged(LootrunItemCell cell)
@@ -161,7 +216,10 @@ public class LootrunSettingsMenu : MonoBehaviour
 
     public void OnMoonChanged(int newMoon)
     {
-        myPreset.moon = newMoon;
+        var moonID = LootrunBase.MoonNameToID(moonsDropdown.options[newMoon].text);
+        myPreset.moon = moonID;
+
+        UpdateWeathersOnList();
 
         SendChanges();
     }
@@ -269,5 +327,15 @@ public class LootrunSettingsMenu : MonoBehaviour
     public void OnSelectionExitClicked()
     {
         itemSelectMenu.SetActive(false);
+    }
+
+    public void OnOldRunsClicked()
+    {
+        oldRunsPage.SetActive(true);
+    }
+
+    public void OnOldRunsExitClicked()
+    {
+        oldRunsPage.SetActive(false);
     }
 }
